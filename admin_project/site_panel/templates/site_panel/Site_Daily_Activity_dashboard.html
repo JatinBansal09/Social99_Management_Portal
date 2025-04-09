@@ -1,0 +1,561 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activity Dashboard</title>
+    <link rel="icon" href="/static/images/cropped-99-1-192x192.webp" sizes="192x192">
+    <link rel="stylesheet" href="/static/site_panel/css/Site_Daily_Activity_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="Settings-tab" class="restaurant-name">
+                <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                {% if request.session.site_location != "all" %}
+                    {{ request.session.restaurant_name }}
+                {% endif %}
+            </a>
+            <a href="/site_panel/home/" id="home-page">Home</a>
+            <a href="#" id="activity-tab">Activity Logs</a>
+            <a href="#" id='reports-tab'>Performance Reports</a>
+            <a href="#">Ops & Marketing Toolkit</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+        </nav>
+        <div id="activity-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+            <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+            <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+        </div>
+        <div id="reports-sub-tabs" class="sub-tabs">
+            <a href="#" id="Daily-Reports">Daily</a>
+            <a href="#" id="Weekly-Reports">Weekly</a>
+            <a href="#" id="Biweekly-Reports">Biweekly</a>
+            <a href="#" id="Monthly-Reports">Monthly</a>
+            <a href="#" id="Specific-Range-Reports">Specific Range</a>
+        </div>
+        <div id="dailyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+        </div>
+        <div id="weeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+            <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+            <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+            <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+        </div>
+        <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+        </div>
+        <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+        </div>
+        <div id="Summary-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+        </div>
+    <script src="/static/site_panel/js/errorHandler.js"></script>
+    </header>
+    <div id="Main-options">
+        <main>
+            <h1>Daily Activity Tracking Dashboard</h1>
+            <div id="filter-buttons">
+                {% if request.session.site_location != "all" %}
+                    <a id='NewButton' href="/site_panel/add_new_daily_activity_record/"><i class="fas fa-plus"></i> Add Entry</a>
+                {% endif %}
+                <button id="Data-Delete"><i class="fas fa-minus"></i> Remove</button>
+                <button id='download-excel'><span class="icon">&#128190;</span>Excel</button>
+                <form method="GET" id="pagination-form">
+                    <div class="pagination-container">
+                        {% if page_obj and page_obj.has_previous %}
+                            <a class='Filter_a' href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&lt;</a>
+                        {% else %}
+                            <button type="button" class="custom-button nav-button" disabled>&lt;</button>
+                        {% endif %}
+                
+                        <select id="page-select" name="page" class="page-dropdown">
+                            {% for page_num in page_range %}
+                                <option value="{{ page_num }}" {% if page_obj.number == page_num %}selected{% endif %}>{{ page_num }}</option>
+                            {% endfor %}
+                        </select>
+                
+                        <span class="page-info">of {{ paginator.num_pages }}</span>
+                
+                        <select id="per-page" name="per_page" class="page-dropdown paging-group">
+                            <option value="1" {% if per_page == 1 %}selected{% endif %}>1/page</option>
+                            <option value="25" {% if per_page == 25 %}selected{% endif %}>25/page</option>
+                            <option value="50" {% if per_page == 50 %}selected{% endif %}>50/page</option>
+                            <option value="100" {% if per_page == 100 %}selected{% endif %}>100/page</option>
+                            <option value="1000" {% if per_page == 1000 %}selected{% endif %}>1000/page</option>
+                        </select>
+                
+                        {% if page_obj and page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&gt;</a>
+                        {% else %}
+                            <button type="button" class="custom-button nav-button" disabled>&gt;</button>
+                        {% endif %}
+                        <div class="search-container">
+                            <button id="filter-button" style="display: none;">Add Filter ></button>
+                            <input type="text" id="employee-search" placeholder="Search employees...">
+                            <button id="search-button"><i class="fas fa-search"></i></button>
+                        </div>
+                        <script>
+                            var siteLocation = "{{ request.session.site_location }}";  // Pass Django variable to JS
+                        </script>
+                    </div>
+            </div>
+            <div id="filter-section" style="display: none;">
+                <div style="display: none; background-color: #007BFF; padding: 10px; border-radius: 5px;">
+                    <div style="display: none; justify-content: space-between; align-items: center;">
+                        <span style="color: white; font-weight: bold;">User Filters</span>
+                        <button id="Add-filter" style="margin-left: 68%">Add Filters</button>
+                        <button id="clear-filters">Clear Filters</button>
+                    </div>
+                    <div id="dynamic-inputs" style="width:50%; margin: 10px auto; display: none;"></div>
+                </div>
+                <button id="Applyfilter-button" style="margin: 10px auto; display: none;">Apply Filters</button>
+            </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('employee-search');
+            const table = document.getElementById('styled-table');
+            let searchTimeout = null;
+        
+            // Function to perform the search
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const rows = table.querySelectorAll('tbody tr');
+                
+                let anyMatches = false;
+                
+                rows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    if (searchTerm === '' || rowText.includes(searchTerm)) {
+                        row.style.display = '';
+                        anyMatches = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Show "no results" message if needed
+                const noResultsMessage = document.getElementById('no-results-message');
+                if (!anyMatches && searchTerm !== '') {
+                    if (!noResultsMessage) {
+                        const message = document.createElement('p');
+                        message.id = 'no-results-message';
+                        message.style.textAlign = 'center';
+                        message.style.padding = '20px';
+                        message.style.color = '#6c757d';
+                        message.textContent = 'No matching employees found.';
+                        table.parentNode.insertBefore(message, table.nextSibling);
+                    }
+                } else if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            }
+        
+            // Debounced search function
+            function debouncedSearch() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performSearch();
+                }, 300); // 300ms delay
+            }
+            
+            searchInput.addEventListener('input', debouncedSearch);
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(searchTimeout);
+                    performSearch();
+                }
+            });
+            
+            
+            // Initial search to handle any pre-filled values
+            performSearch();
+        });
+        
+    </script>
+
+        <!-- Data View -->
+        <div id="site_data_view">
+            <!-- Display the data in a table -->
+            <table class="styled-table" id="styled-table">
+                <thead>
+                    <tr>
+                        <th id="edit-delete"><input type="checkbox"></th>
+                        <th>Date</th>
+                        {% if request.session.site_location == "all" %}
+                            <th>Location</th>
+                        {% endif %}
+                        <th>Notes</th>
+                        <th id="edit-delete">Edit Site</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if activity_data %}  {% for row in activity_data %}
+                            <tr>
+                                <td id="edit-delete" class><input type="checkbox"></td>
+                                <td>{{ row.Date }}</td>
+                                {% if request.session.site_location == "all" %}
+                                    <td>{{ row.Location }}</td>
+                                {% endif %}
+                                <td>{{ row.Notes }}</td>
+                                <td id="edit-delete" ><a class="edit-icon" data-siteid="{{ row.SiteID }}" data-date="{{ row.Date }}"><i class="fas fa-edit"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <form id="csrf-form" style="display:none; margin: 10px auto; margin-bottom:10%;">{% csrf_token %}
+            {% if no_results %}
+            <p style="margin: 10px auto;">No records found.</p>
+            {% elif invalid_page %}
+                <p style="margin: 10px auto;">Invalid page number.</p>
+            {% endif %}
+        </form>
+        </form>
+        <script type="module">
+
+            import { parse, format } from 'https://cdn.skypack.dev/date-fns';
+
+            const userType = "{{ request.session.site_location }}"; 
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteButton = document.getElementById('Data-Delete');
+                const headerCheckbox = document.querySelector('th input[type="checkbox"]');
+                const rowCheckboxes = document.querySelectorAll('td input[type="checkbox"]');
+                const newButton = document.getElementById('NewButton');
+                const sessionDataDiv = document.getElementById('session-data');
+
+    
+                // Get today's date and subtract 7 days
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalize time to avoid issues
+                const oneWeekAgo = new Date(today);
+                oneWeekAgo.setDate(today.getDate() - 7);
+                    
+                // Select all edit icons (which contain the data-date attribute)
+                document.querySelectorAll('.edit-icon').forEach(icon => {
+                    const dateStr = icon.getAttribute('data-date'); // Get the date from data attribute
+                    if (!dateStr) return; // Skip if no date found
+                    
+                            // Convert the date string to a Date object
+                    const dateObj = new Date(dateStr);
+                            
+                            // Compare with one week ago
+                    if (dateObj < oneWeekAgo && userType!=='all') {
+                                // Find the checkbox in the same row and remove it
+                        const row = icon.closest('tr');
+                        const checkbox = row.querySelector('input[type="checkbox"]');
+                        if (checkbox) {
+                                checkbox.remove();
+                            }
+                    }
+                });
+                    
+    
+                // Listen for change events on the header checkbox
+                if (headerCheckbox) {
+                    headerCheckbox.addEventListener('change', function() {
+                        rowCheckboxes.forEach(checkbox => checkbox.checked = headerCheckbox.checked);
+                    });
+                }
+
+                // Optionally, you can add an event listener to row checkboxes to uncheck the header checkbox
+                // when not all checkboxes are selected.
+                if (rowCheckboxes) {
+                    rowCheckboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const allChecked = [...rowCheckboxes].every(cb => cb.checked);
+                            headerCheckbox.checked = allChecked;
+                        });
+                    });
+                }
+
+        
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', async function() {
+                        const selectedRows = [];
+                        const checkboxes = document.querySelectorAll('.styled-table td input[type="checkbox"]:checked');
+                
+                        if (checkboxes.length === 0) { // Check if any checkboxes are selected *first*
+                            alert('No rows selected for deletion');
+                            return;
+                        }
+                
+                        for (const checkbox of checkboxes) {
+                            const row = checkbox.closest('tr');
+                            const siteID = row.querySelector('.edit-icon').dataset.siteid;
+                            let siteDate = row.querySelector('td:nth-child(3)').textContent.trim();
+                
+                            if (!siteDate) {
+                                console.error("siteDate is empty or null for row:", row);
+                                alert("Date is missing in some rows.");
+                                continue; // Skip to the next row
+                            }
+                
+                            try {
+                                // ***CRITICAL: Adjust the parse format string to match your date format***
+                                const parsedDate = parse(siteDate, 'MMMM d, yyyy', new Date()); // Correct format: "March 19, 2025"
+                                const formattedDate = format(parsedDate, 'yyyy-MM-dd');
+                                siteDate = formattedDate;
+                                selectedRows.push({ siteID, siteDate });
+                            } catch (error) {
+                                console.error("Date parsing error:", error, siteDate);
+                                alert("Invalid date format: " + siteDate + ". Please check the format.");
+                                continue; // Skip to the next row
+                            }
+                        }
+                
+                        if (selectedRows.length === 0) {  // Check again *after* potential date parsing errors
+                            alert('No rows selected for deletion (due to format errors).');
+                            return;
+                        }
+                
+                        const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+                
+                        if (!csrfTokenElement) {
+                            console.error('CSRF token element not found');
+                            alert('CSRF token not found. Please try again.');
+                            return;
+                        }
+                
+                        const csrfToken = csrfTokenElement.value;
+                        const url = '/site_panel/Delete_Site_Daily_Activity_Tracker/';
+                
+                        try {
+                            const response = await fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken,
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ data: selectedRows })
+                            });
+                
+                            const data = await response.json();
+                
+                            if (response.status === 200 && data.success) {
+                                alert('Data deleted successfully.');
+                                // Reload the page or update the table as needed
+                                window.location.reload(); // Example: Reload the page
+                            } else {
+                                console.error('Deletion failed:', data); // Log the error details
+                                alert('Failed to delete data. Please try again.');
+                            }
+                        } catch (error) {
+                            console.error('An error occurred:', error);
+                            alert('An error occurred during the deletion process.');
+                        }
+                    });
+                }
+                
+                const editIcons = document.querySelectorAll('.edit-icon');               
+            
+                editIcons.forEach(icon => {
+                    icon.addEventListener('click', async function(event) {
+                        event.preventDefault();
+                
+                        const siteID = icon.dataset.siteid;
+                        const siteDate = icon.dataset.date;
+
+                        
+                
+                        // Convert siteDate to a Date object
+                        const siteDateObj = new Date(siteDate);
+                        const today = new Date();
+                
+                        // Calculate the difference in days
+                        const diffTime = today - siteDateObj;
+                        const diffDays = diffTime / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+                
+                        // Restrict editing if the date is older than 7 days
+                
+                        const formData = new FormData();
+                        formData.append('site_id', siteID);
+                        const formattedDate = siteDateObj.toISOString().split('T')[0]; // YYYY-MM-DD format
+                        formData.append('site_date', formattedDate);
+                        formData.append('date', siteDate);
+                        if (diffDays > 7 && userType!=='all') {
+                            formData.append('permission', 'not_allowed');
+                            const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+                            if (csrfTokenElement) {
+                                const csrfToken = csrfTokenElement.value;
+                                const url = '/site_panel/Edit_Site_Daily_Activity_Tracker/';
+                    
+                                try {
+                                    const response = await fetch(url, {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRFToken': csrfToken,
+                                        },
+                                        body: formData,
+                                    });
+                    
+                                    const data = await response.json();
+                    
+                                    if (response.status === 200 && data.redirect_url) {
+                                        window.location.href = data.redirect_url; // Navigate to the edit page securely
+                                    } else if (response.status === 403) {
+                                        alert('You are not authorized to perform this action. Please log in.');
+                                    } else {
+                                        console.error('Unexpected response:', data);
+                                    }
+                                } catch (error) {
+                                    console.error('An error occurred:', error);
+                                }
+                            } else {
+                                console.error('CSRF token element not found');
+                            }
+                        }
+                        else{
+                            formData.append('permission', 'allowed');
+                            const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+                            if (csrfTokenElement) {
+                                const csrfToken = csrfTokenElement.value;
+                                const url = '/site_panel/Edit_Site_Daily_Activity_Tracker/';
+                    
+                                try {
+                                    const response = await fetch(url, {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRFToken': csrfToken,
+                                        },
+                                        body: formData,
+                                    });
+                    
+                                    const data = await response.json();
+                    
+                                    if (response.status === 200 && data.redirect_url) {
+                                        window.location.href = data.redirect_url; // Navigate to the edit page securely
+                                    } else if (response.status === 403) {
+                                        alert('You are not authorized to perform this action. Please log in.');
+                                    } else {
+                                        console.error('Unexpected response:', data);
+                                    }
+                                } catch (error) {
+                                    console.error('An error occurred:', error);
+                                }
+                            } else {
+                                console.error('CSRF token element not found');
+                            }
+                        }
+                    });
+                });
+                
+                
+                document.getElementById("download-excel").addEventListener("click", function () {
+                    fetch("/site_panel/download_activity_excel/")
+                    .then(response => response.blob())
+                    .then(blob => {
+                        let link = document.createElement("a");
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = "all_sites_report.xlsx";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => console.error("Download failed:", error));
+                });
+                if (localStorage.getItem('activeTab'))
+                        {
+                            if (!sessionStorage.getItem('isRefreshed')) {
+                                sessionStorage.setItem('isRefreshed', 'true');
+                            }
+                        
+                            // Flag to track navigation
+                            let isNavigating = false;
+                        
+                            // Listen for link clicks or form submissions
+                            document.addEventListener('click', function (event) {
+                                if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                                    isNavigating = true;
+                                }
+                            });
+                        
+                            // Listen for form submissions
+                            document.addEventListener('submit', function () {
+                                isNavigating = true;
+                            });
+                        
+                            // Clear localStorage only when the tab is closed
+                            window.addEventListener('beforeunload', function () {
+                                if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                                    // Tab is being closed, clear activeTab
+                                    localStorage.removeItem('activeTab');
+                                } else {
+                                    // Page is being refreshed or navigated, keep activeTab
+                                    sessionStorage.removeItem('isRefreshed');
+                                }
+                            });
+                
+                }
+                document.getElementById('Sign-Out').addEventListener('click', function (event) {
+                            // Remove activeTab from localStorage
+                            localStorage.removeItem('activeTab');
+                            // Allow the default navigation to proceed
+                });
+            });
+            
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2025 Social99. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            document.getElementById('Sign-Out').addEventListener('click', function () {
+                localStorage.removeItem('activeTab');  // Clear storage to prevent stale token issues
+                sessionStorage.clear();  
+            });
+        });
+    </script>
+    <script>
+        window.addEventListener("beforeunload", function (event) {
+            // Send a request to the server to end the session
+            navigator.sendBeacon('/site_panel/end-session/'); // Use the appropriate URL for your endpoint
+        });
+    </script>
+    <script src="/static/site_panel/js/site_activity_tracker_dashboard.js" defer></script>
+</body>
+</html>

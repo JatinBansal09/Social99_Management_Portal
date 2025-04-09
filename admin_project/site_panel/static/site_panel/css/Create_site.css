@@ -1,0 +1,355 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+header {
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+}
+
+nav a:hover {
+  border-top: 3px solid white;
+  margin-top: 0;
+  display: inline-block; /* Ensures proper alignment */
+}
+
+nav a.active {
+ border-top: 3px solid white;
+ margin-top: 0;
+ display: inline-block; /* Ensures proper alignment */
+}
+
+.spacer {
+      flex-grow: 1;
+  }
+  
+#settings-icon {
+      font-size: 18px;
+      color: white;
+  }
+
+.sub-tabs {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      z-index: 1;
+  }
+
+#Settings-sub-tabs{
+      margin-left: 90.5%;
+      width: 6.5%;
+      padding: 10px;
+  }
+
+.sub-tabs a {
+      color: #343a40;
+      display: block;
+      padding: 5px 10px;
+  }
+  
+.sub-tabs a:hover {
+      background-color: #eee;
+  }
+  
+main {
+      flex: 1; /* Key: Allow main content to expand */
+      padding: 90px;
+  }
+
+form .input-box {
+display: flex;
+justify-content: space-between;
+align-items: center; /* Align items vertically */
+margin-bottom: 5px; /* Add spacing between rows */
+}
+
+form .input-box .input-field {
+flex: 1; /* Allow inputs to take remaining space */
+margin-left: 10px; /* Add spacing between label and input */
+margin-right: 10px;
+}
+
+form input{
+width: 90%;
+font-size: 16.5px;
+}
+
+form #address{
+  width: 120%;
+  padding-right: -10%;
+}
+
+#maps-icon {
+  cursor: pointer;
+  font-size: 24px;
+  padding-left: 25%;
+  color: #007bff;
+}
+
+#map-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 70%;
+  left: 83.6%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  max-width: 400px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#map {
+  width: 100%;
+  height: 300px;
+  border-bottom: 1px solid #ddd;
+}
+#close-modal {
+  display: block;
+  background: #007bff;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+}
+#close-modal:hover {
+  background: #0056b3;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 999;
+}
+
+#message {
+  display: none; /* Completely remove when empty */
+  color: red;
+  text-align: center;
+  width: 100%;
+}
+
+/* Apply margin-top only when message is visible */
+#message:empty {
+  display: none;
+}
+
+#message:not(:empty) {
+  display: block;
+  margin-top: 10px; /* Only apply spacing when there's a message */
+}
+
+form {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.15);
+  background: #343a40;
+  width: 600px;
+  margin: auto;
+  margin-left: -5%;
+  min-height: 200px;
+  height: auto;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 5.5%;
+}
+
+/* Style for all form inputs, select, textarea */
+form input,
+form textarea,
+form select {
+  width: 100%; /* Ensure full width */
+  padding: 10px 15px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background-color: #ffffff;
+  color: #343a40;
+  font-size: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+#address {
+  width: 155% !important; /* Forces full width */
+}
+
+#map-id{
+  margin-top: -2%;
+}
+
+form button {
+  width: 20%; /* Same width as input fields */
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f8f9fa; /* Light background for contrast */
+  color: #343a40;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for button */
+form button:hover {
+  background-color: #343a40; /* Match theme */
+  color: #ffffff;
+}
+
+/* On focus */
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: #66afe9;
+  box-shadow: 0 0 0 2px rgba(102, 175, 233, 0.5);
+}
+
+/* Optional: Label spacing */
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-left: -7%;
+}
+
+footer {
+  align-items: center;
+  padding: 10px 0;
+  background-color: #f4f4f4;
+  font-size: 0.9em;
+  border-top: 1px solid #ccc;
+  width: 100%;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+
+  nav a {
+      font-size: 0.8rem;
+  }
+
+  .sub-tabs a {
+      font-size: 0.7rem;
+  }
+
+  #settings-icon {
+    font-size: 0.9rem;
+    }
+
+  main{
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      font-size: 0.7rem;
+  }
+  
+  form{
+      font-size: 0.8rem;
+      width: 400px;
+  }
+
+  .CreateSiteForm {
+      width: auto; /* Allow the table to expand naturally */
+      display: table; /* Ensure the table is treated as a table */
+  }
+
+  .CreateSiteForm::-webkit-scrollbar {
+      width: 8px; /* Adjust scrollbar width */
+      height: 8px; /* Adjust scrollbar height */
+  }
+
+  .CreateSiteForm::-webkit-scrollbar-thumb {
+      background-color: #888; /* Adjust scrollbar thumb color */
+      border-radius: 4px;
+  }
+
+  .CreateSiteForm {
+      scrollbar-width: thin; /* or auto, or none */
+      scrollbar-color: #888 transparent; /* thumb and track color */
+  }
+
+  form label {
+    font-size: 0.8rem;
+  }
+
+  form input{
+    font-size: 0.8rem;
+    }
+
+  footer {
+      font-size: 0.85rem;
+  }
+
+  button {
+      font-size: 0.8rem;
+  }
+}
+
+
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+  nav a {
+    font-size: 18px;
+}
+
+.sub-tabs a {
+    font-size: 18px;
+}
+
+#settings-icon {
+  font-size: 20px;
+}
+
+main{
+    font-size: 18px;
+}
+
+form{
+  font-size: 18px;
+}
+
+form label {
+  font-size: 18px;
+}
+
+form input{
+  font-size: 18px;
+  }
+
+footer {
+    font-size: 18px;
+}
+
+button {
+    font-size: 18px;
+}
+}
+

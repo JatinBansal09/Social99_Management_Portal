@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <link rel="icon" href="{% static 'site_panel/images/social99.png' %}" sizes="192x192">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'site_panel/css/admin_page_dashboard.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/site_panel/admin/dashboard/" id="home-page">Home</a>
+            <a href="/site_panel/create_site/">Create Site</a>
+            <a href="/site_panel/viewSites/">View Sites</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/admin_logout/" id="Sign-Out">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <div class="content">
+            <p>Welcome to Admin Portal</p>
+            <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Logo">
+            <button id="CreateSite"><b>Create Site</b></button>
+            <button id="ViewSites"><b>View Sites</b></button>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; {{ year }} Social99. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            
+        });
+    </script>
+    <script src="{% static 'site_panel/js/admin_page_dashboard.js' %}"></script> 
+</body>
+</html>

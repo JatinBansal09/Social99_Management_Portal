@@ -1,0 +1,393 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="icon" href="{% static 'site_panel/images/restaurant_icon.png' %}" type="image/png">
+    <title>Add New Employee</title>
+    <link rel="stylesheet" href="/static/site_panel/css/Site_New_Employees_Addition.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="Settings-tab" class="restaurant-name">
+                <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                {% if request.session.site_location != "all" %}
+                    {{ request.session.restaurant_name }}
+                {% endif %}
+            </a>
+            <a href="/site_panel/home/" id="home-page">Home</a>
+            <a href="#" id="activity-tab">Activity Logs</a>
+            <a href="#" id='reports-tab'>Performance Reports</a>
+            <a href="#">Ops & Marketing Toolkit</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+        </nav>
+        <div id="activity-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+            <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+            <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+        </div>
+        <div id="reports-sub-tabs" class="sub-tabs">
+            <a href="#" id="Daily-Reports">Daily</a>
+            <a href="#" id="Weekly-Reports">Weekly</a>
+            <a href="#" id="Biweekly-Reports">Biweekly</a>
+            <a href="#" id="Monthly-Reports">Monthly</a>
+            <a href="#" id="Specific-Range-Reports">Specific Range</a>
+        </div>
+        <div id="Settings-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_logout/" id="Setting">Settings</a>
+            <a href="/site_panel/site_logout/" id="Sign-Out">Sign-Out</a>
+        </div>
+        <div id="dailyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+        </div>
+        <div id="weeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+            <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+            <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+            <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+        </div>
+        <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+        </div>
+        <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+        </div>
+        <div id="Summary-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+        </div>
+    <script src="/static/site_panel/js/errorHandler.js"></script>
+    </header>
+    <main>
+        <h2>Add a New Employee</h2>
+        <h5><a href="/site_panel/employee_management_dashboard/">&lt;&lt;Employees Dashboard</a></h5>
+        <div id="Employee_form">
+            <button data-target="NewEmployees-form" id="NewEmployees_button">Employee</button>
+            <button data-target="Compensation-form" id="Compensation_button">Compensation</button>
+            <!-- Added Promotions button -->
+        </div>
+        <div class="form-section" id='NewEmployee-form' active>
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="Employee_name">Employee Name<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="Employee_name" name="Employee_name" value="" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="Employee_Owner">Owner:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="Employee_Owner" name="Employee_Owner" list="owner-list" value="" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+                        
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="location">Location<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="location" name="location" value="{{ request.session.site_location }}" readonly>
+                    </div>
+                </div>
+
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="Employee_Start_date">Start Date<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="date" id="Employee_Start_date" name="Employee_Start_date" required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="Employee_End_date">End Date:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="date" id="Employee_End_date" name="Employee_End_date">
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="phone1">Primary Contact <span>*</span> :</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="tel" id="phone1" name="phone1" placeholder="Enter a valid phone number" required>
+                        <span id="phone1-error" style="display:none; color:red;">Invalid phone number format!</span>
+                        <script>
+                            document.getElementById("phone1").addEventListener("blur", function () {
+                                let phoneInput = this;
+                                let errorText = document.getElementById("phone1-error");
+                                let value = phoneInput.value.trim();
+                            
+                                // Regular expression for valid phone number format
+                                let pattern = new RegExp("^\\(?(\\+\\d{1,3})\\)?[-.\\s]?\\d{6,14}$");
+
+                                let invalidCharsPattern = /[^0-9+\-.\s()]/;
+                            
+                                let unbalancedBracketsPattern = /\([^\d)]*\)|\([^\d]*$|\)[^\d(]*\(/; // No numbers inside () or only one bracket
+                            
+                                if (invalidCharsPattern.test(value)) {
+                                    errorText.textContent = "Invalid characters detected! Only numbers, +, -, ., (), and spaces are allowed.";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Invalid characters in phone number.");
+                                } else if (unbalancedBracketsPattern.test(value)) {
+                                    errorText.textContent = "Invalid format! Ensure parentheses are used correctly, e.g., (+91) 9876543210.";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Incorrect parentheses usage.");
+                                } else if (!pattern.test(value)) {
+                                    errorText.textContent = "Invalid format! Ensure the number starts with a country code or there's issue with spacing (e.g., +1, +91).";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Phone number must start with a country code.");
+                                } else {
+                                    errorText.style.display = "none";
+                                    phoneInput.setCustomValidity("");
+                                }
+
+                                if (errorText.style.display === "inline") {
+                                    setTimeout(() => {
+                                        errorText.style.display = "none";
+                                    }, 5000);
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>   
+                
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="phone2">Secondary Contact:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="tel" id="phone2" name="phone2" placeholder="Enter a valid phone number">
+                        <small id="phone2-error" style="color: red; display: none;"></small>
+                        <script>
+                            document.getElementById("phone2").addEventListener("blur", function () {
+                                let phoneInput = this;
+                                let errorText = document.getElementById("phone2-error");
+                                let value = phoneInput.value.trim();
+                            
+                                // Regular expression for valid phone number format
+                                let pattern = new RegExp("^\\(?(\\+\\d{1,3})\\)?[-.\\s]?\\d{6,14}$");
+
+                                let invalidCharsPattern = /[^0-9+\-.\s()]/;
+                            
+                                let unbalancedBracketsPattern = /\([^\d)]*\)|\([^\d]*$|\)[^\d(]*\(/; // No numbers inside () or only one bracket
+                            
+                                if (invalidCharsPattern.test(value)) {
+                                    errorText.textContent = "Invalid characters detected! Only numbers, +, -, ., (), and spaces are allowed.";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Invalid characters in phone number.");
+                                } else if (unbalancedBracketsPattern.test(value)) {
+                                    errorText.textContent = "Invalid format! Ensure parentheses are used correctly, e.g., (+91) 9876543210.";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Incorrect parentheses usage.");
+                                } else if (!pattern.test(value)) {
+                                    errorText.textContent = "Invalid format! Ensure the number starts with a country code or there's issue with spacing (e.g., +1, +91).";
+                                    errorText.style.display = "inline";
+                                    phoneInput.setCustomValidity("Phone number must start with a country code.");
+                                } else {
+                                    errorText.style.display = "none";
+                                    phoneInput.setCustomValidity("");
+                                }
+
+                                if (errorText.style.display === "inline") {
+                                    setTimeout(() => {
+                                        errorText.style.display = "none";
+                                    }, 5000);
+                            });
+                        </script>
+                    </div>                    
+                </div>
+                
+                
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="smart_serve">Smart Serve#:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="smart_serve" name="smart_serve" placeholder="Enter smart server number!">
+                    </div>
+                </div>
+
+                <p id="general-error" class="error-message" style="color: red;"></p>
+            
+                <!-- Submit Button -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <button type="submit">Save</button>
+                    </div>
+                </div>
+            </form>  
+        </div>      
+        <div class="form-section" id="Compensation-form" data-tab="Compensation-form">
+        <hr>
+            <div id='Main-options'>
+                <div id="filter-buttons">
+                    <a class='Filter_a' id="newCompensationLink" href="#"><i class="fas fa-plus"></i> Add Compensation</a>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let newCompensationLink = document.getElementById("newCompensationLink");
+
+                            newCompensationLink.addEventListener("click", function (event) {
+                                event.preventDefault(); // Prevent default action
+                                
+                                let emp_id = localStorage.getItem("emp_id") || ""; // Retrieve stored emp_id
+                                
+                                if (emp_id) {
+                                    console.log("Retrieved emp_id:", emp_id);
+                                    newCompensationLink.href = `/site_panel/new_compensation_record/?e_id=${emp_id}`;
+                                    window.location.href = newCompensationLink.href; // Redirect
+                                } else {
+                                    alert("Employee ID doesn't exist");
+                                }
+                            });
+                        });
+                    </script>
+
+
+                    <button id="Data-Delete"><i class="fas fa-minus"></i> End Compensation</button>
+                    <button><span class="icon">&#128190;</span>Excel</button>
+                    <form method="GET" id="pagination-form">
+                        <div class="pagination-container">
+                            {% if page_obj and page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&lt;</a>
+                            {% else %}
+                                <button type="button" class="custom-button nav-button" disabled>&lt;</button>
+                            {% endif %}
+                    
+                            <select id="page-select" name="page" class="page-dropdown">
+                                {% for page_num in page_range %}
+                                    <option value="{{ page_num }}" {% if page_obj.number == page_num %}selected{% endif %}>{{ page_num }}</option>
+                                {% endfor %}
+                            </select>
+                    
+                            <span class="page-info">of {{ paginator.num_pages }}</span>
+                    
+                            <select id="per-page" name="per_page" class="page-dropdown paging-group">
+                                <option value="1" {% if per_page == 1 %}selected{% endif %}>1/page</option>
+                                <option value="25" {% if per_page == 25 %}selected{% endif %}>25/page</option>
+                                <option value="50" {% if per_page == 50 %}selected{% endif %}>50/page</option>
+                                <option value="100" {% if per_page == 100 %}selected{% endif %}>100/page</option>
+                                <option value="1000" {% if per_page == 1000 %}selected{% endif %}>1000/page</option>
+                            </select>
+                    
+                            {% if page_obj and page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&gt;</a>
+                            {% else %}
+                                <button type="button" class="custom-button nav-button" disabled>&gt;</button>
+                            {% endif %}
+                            <div class="search-container">
+                                <input type="text" placeholder="Search..." class="search-input">
+                                <a class='Filter_a'>Filters ></a>
+                            </div>
+                                    
+                        </div>
+                        {% if no_results %}
+                            <p>No records found.</p>
+                            {% elif invalid_page %}
+                                <p>Invalid page number.</p>
+                            {% endif %}
+                    </form>
+                </div>
+            </div>
+            
+
+            <form id="csrf-form" style="display:none;">{% csrf_token %}</form>
+    
+            <!-- Data View -->
+            <div id="site_data_view">
+                <!-- Display the data in a table -->
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th id="edit-delete"><input type="checkbox"></th>
+                            <th id="edit-delete"></th>
+                            <th>Employee Name</th>
+                            <th>Position</th>
+                            <th>Position Type</th>
+                            <th>Rate Type</th>
+                            <th>Rate</th>
+                            <th>Effective Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if activity_data %}  {% for row in activity_data %}
+                                <tr>
+                                    <td id="edit-delete" class><input type="checkbox"></td>
+                                    <td id="edit-delete" ><a class="edit-icon" data-siteid="{{ row.SiteID }}" data-date="{{ row.Date }}"><i class="fas fa-edit"></i></a></td>
+                                    <td>{{ row.Date }}</td>
+                                    <td>{{ row.Notes }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Social99. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            document.getElementById('Sign-Out').addEventListener('click', function () {
+                localStorage.removeItem('activeTab');  // Clear storage to prevent stale token issues
+                sessionStorage.clear();  
+            });
+        });
+    </script>
+    <script src="/static/site_panel/js/Site_New_Employees_Addition.js"></script>
+</body>
+</html>

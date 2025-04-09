@@ -1,0 +1,597 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    background-color: #343a40;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+nav {
+    display: flex;
+    align-items: center; /* Vertically center nav items */
+    /* No need to change nav for responsiveness, it's naturally at the top */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-top: 0; /* Remove top margin */
+    padding-top: 20px;
+}
+
+nav a#home-page:hover,
+nav a#home-page.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 3.5%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#activity-tab:hover,
+nav a#activity-tab.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 8%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#reports-tab:hover,
+nav a#reports-tab.active {
+    border-top: 3px solid white;
+    margin-top: 1.5%;
+    display: inline-block; /* Ensures proper alignment */
+    width: 6%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#Sign-Out:hover,
+nav a#Sign-Out.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 4%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#home-page {
+    /* Override the general nav a styles for the Home link */
+    color: inherit; /* or your desired color */
+    background-color: transparent; /* or your desired background */
+    padding-left: 2%;
+}
+
+nav a#home-page:hover {
+    background-color: transparent;/*or whatever background you want on hover.*/
+}
+
+nav a#home-page.active {
+    background-color: transparent; /*or whatever background you want on active.*/
+}
+
+.restaurant-name {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700; /* Medium weight */
+    width: 10%;
+    padding-right: 3%;
+    padding-top: -6%;
+    padding-bottom: -6%;
+    margin-left: 12px;
+    color: white;
+}
+
+.restaurant-icon {
+    height: 45px; /* Adjust size as needed */
+    margin-right: 6px; /* Space between icon and text */
+    padding: 0 !important; /* Override any inherited padding */
+    border: none; /* Remove any border */
+    display: block; /* Prevent inline spacing issues */
+    max-width: 100%; /* Ensure no extra space */
+    margin-top: -15px;
+    margin-left: -20px;
+    margin-bottom: -15px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+#settings-icon {
+    font-size: 18px;
+}
+
+.sub-tabs {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1;
+}
+
+#activity-sub-tabs{
+    margin-left: 21.4%;
+    width: 9%;
+    padding: 10px;
+}
+
+#reports-sub-tabs{
+    margin-left: 31.5%;
+    width: 7%;
+    padding: 8px;
+}
+
+header div a {
+    text-decoration: none; /* Removes underline */
+}
+
+header div a:hover {
+    text-decoration: none; /* Ensures it stays removed on hover */
+}
+
+#dailyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:0.5%;
+}
+
+#weeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:3%;
+}
+
+#BiweeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:5%;
+}
+
+#Monthly-rollover-sub-tabs{
+    margin-left: 38%;
+    margin-top:7.4%;
+}
+
+#Summary-sub-tabs{
+    margin-left: 38%;
+    margin-top:10.5%;
+}
+
+#Settings-sub-tabs{
+    margin-left: 81.5%;
+    width: 15%;
+    padding: 10px;
+}
+
+.sub-tabs a {
+    color: #333;
+    display: block;
+    padding: 5px 10px;
+}
+
+.sub-tabs a:hover {
+    background-color: #eee;
+}
+
+main {
+    flex: 1; /* Key for sticky footer */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow: auto;
+}
+
+main h5 a {
+    text-decoration: none !important;
+    color: #007bff;
+}
+
+main h5 a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+main h2 {
+    margin-bottom: 5px;
+}
+
+main h5 {
+    margin-top: 5px;
+}
+
+#Activity_forms {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+#Activity_forms button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#Activity_forms button:hover {
+    background-color: #0056b3;
+}
+
+#Activity_forms button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.form-section {
+    display: none;
+    margin-top: 20px;
+}
+
+.form-section.active {
+    display: block;
+}
+
+form {
+    padding: 30px;
+    width: 700px;
+    max-width: 90%; /* Responsive width */
+    min-height: 200px;
+    color: black;
+    opacity: 0.9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    margin-left: 20px;
+    margin-top: 3%;
+}
+
+.input-box {
+    display: flex;
+    flex-wrap: wrap; /* Ensure flexbox items wrap when needed */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Allow input elements to wrap */
+}
+
+.input-field {
+    flex: 1;
+    margin-left: 10px;
+    min-width: 200px; /* Minimum width for input fields */
+}
+
+.input-field label {
+    font-weight: bold;
+}
+
+.input-field input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+#sales-form span {
+    color: red;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: auto; /* Adjust width as needed */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+}
+
+footer {
+    align-items: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    font-size: 0.9em;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+    margin-top: 3%;
+}
+
+
+/* Media Queries */
+
+@media screen and (min-width: 1900px) {
+    /* ... your large screen styles */
+    body{
+        font-size: 22px;
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto;
+    }
+    #Settings-tab input{
+        font-size: 22px;
+    }
+
+}
+
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+    body{
+    font-size: 20px;
+    max-width: auto; /* Prevents content from stretching too much */
+    margin: 0 auto;
+}
+
+#Settings-tab input{
+    font-size: 20px;
+}
+}
+
+@media screen and (max-width: 1300) and (min-width: 900px) {
+    
+    body {
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto; /* Centers the content */
+    }
+
+    footer {
+        bottom: 0;
+        margin-top: auto;
+    }
+    
+}
+
+@media screen and (min-width: 1900px) {
+    form {
+        width: 80%; /* Adjust form width for larger screens */
+    }
+
+    .input-field {
+        min-width: 250px; /* Adjust min-width for larger screens */
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    form {
+        width: 75%; /* Make the form take up more width on smaller screens */
+    }
+
+    .input-field {
+        min-width: 150px; /* Adjust min-width for smaller screens */
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+    }
+    
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.8rem;
+    }
+    
+    .sub-tabs {
+        position: absolute; /* or fixed */
+        top: 100px;
+        left: 0; /* Changed from 10px */
+        width: 100%; /* Changed from calc */
+        background-color: #343a40;
+        z-index: 1000;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    
+    .sub-tabs a {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    
+    #activity-sub-tabs a,
+    #reports-sub-tabs a,
+    #dailyReport-sub-tabs a,
+    #weeklyReport-sub-tabs a,
+    #BiweeklyReport-sub-tabs a,
+    #Monthly-rollover-sub-tabs a,
+    #Summary-sub-tabs a {
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    #activity-sub-tabs {
+        margin-top: 60px;
+        background-color: #343a40;
+        width: 90%;
+        margin-left: 20px;
+        box-sizing: border-box;
+    }
+
+    #reports-sub-tabs {
+        margin-top: 100px;
+        margin-left: 20px;
+        padding: 10px;
+        background-color: #343a40;
+        width: 90%;
+        box-sizing: border-box;
+    }
+    
+    #dailyReport-sub-tabs {
+        margin-top: 110px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #weeklyReport-sub-tabs {
+        margin-top: 140px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #BiweeklyReport-sub-tabs {
+        margin-top: 170px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Monthly-rollover-sub-tabs {
+        margin-top: 200px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Summary-sub-tabs {
+        margin-top: 230px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    h2{
+        font-size: 1.2rem;
+    }
+
+    h5{
+        font-size: 0.7rem;
+    }
+
+    button{
+        font-size: 0.7rem;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.8rem;
+    }
+
+    .sub-tabs {
+        width: 90%;
+        margin-left: 0;
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .sub-tabs a {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.7rem;
+    }
+
+    form {
+        padding: 20px; /* Reduce padding for smaller screens */
+        font-size: 0.8rem;
+    }
+
+    button[type="submit"] {
+        width: 100%; /* Make submit button full width */
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    h2{
+        font-size: 1rem;
+    }
+
+    h5{
+        font-size: 0.5rem;
+    }
+
+    button{
+        font-size: 0.6rem;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.6rem;
+    }
+
+    .sub-tabs {
+        width: 90%;
+        margin-left: 0;
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .sub-tabs a {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.7rem;
+    }
+
+    form {
+        padding: 20px; /* Reduce padding for smaller screens */
+        font-size: 0.6rem;
+    }
+
+    button[type="submit"] {
+        width: 100%; /* Make submit button full width */
+    }
+}

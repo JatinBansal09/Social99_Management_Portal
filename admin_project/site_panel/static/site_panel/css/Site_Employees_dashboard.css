@@ -1,0 +1,692 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure footer sticks to bottom */
+}
+
+header {
+    background-color: #343a40;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+nav {
+    display: flex;
+    align-items: center; /* Vertically center nav items */
+    /* No need to change nav for responsiveness, it's naturally at the top */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-top: 0; /* Remove top margin */
+    padding-top: 20px;
+}
+
+nav a#home-page:hover,
+nav a#home-page.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 3.5%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#activity-tab:hover,
+nav a#activity-tab.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 8%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#reports-tab:hover,
+nav a#reports-tab.active {
+    border-top: 3px solid white;
+    margin-top: 1.5%;
+    display: inline-block; /* Ensures proper alignment */
+    width: 6%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#Sign-Out:hover,
+nav a#Sign-Out.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 4%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#home-page {
+    /* Override the general nav a styles for the Home link */
+    color: inherit; /* or your desired color */
+    background-color: transparent; /* or your desired background */
+    padding-left: 2%;
+}
+
+nav a#home-page:hover {
+    background-color: transparent;/*or whatever background you want on hover.*/
+}
+
+nav a#home-page.active {
+    background-color: transparent; /*or whatever background you want on active.*/
+}
+
+.restaurant-name {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700; /* Medium weight */
+    width: 10%;
+    padding-right: 3%;
+    padding-top: -6%;
+    padding-bottom: -6%;
+    margin-left: 12px;
+    color: white;
+}
+
+.restaurant-icon {
+    height: 45px; /* Adjust size as needed */
+    margin-right: 6px; /* Space between icon and text */
+    padding: 0 !important; /* Override any inherited padding */
+    border: none; /* Remove any border */
+    display: block; /* Prevent inline spacing issues */
+    max-width: 100%; /* Ensure no extra space */
+    margin-top: -15px;
+    margin-left: -20px;
+    margin-bottom: -15px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+#settings-icon {
+    font-size: 18px;
+}
+
+.sub-tabs {
+    display: none; /* Initially hidden */
+    position: absolute;
+    background-color: #fff; /* White sub-tab background */
+    border: 1px solid #ccc;
+    z-index: 1; /* Ensure it's on top */
+}
+
+.sub-tabs {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1;
+}
+
+#activity-sub-tabs{
+    margin-left: 21.4%;
+    width: 9%;
+    padding: 10px;
+}
+
+#reports-sub-tabs{
+    margin-left: 31.5%;
+    width: 7%;
+    padding: 8px;
+}
+
+header div a {
+    text-decoration: none; /* Removes underline */
+}
+
+header div a:hover {
+    text-decoration: none; /* Ensures it stays removed on hover */
+}
+
+#dailyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:0.5%;
+}
+
+#weeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:3%;
+}
+
+#BiweeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:5%;
+}
+
+#Monthly-rollover-sub-tabs{
+    margin-left: 38%;
+    margin-top:7.4%;
+}
+
+#Summary-sub-tabs{
+    margin-left: 38%;
+    margin-top:10.5%;
+}
+
+#Settings-sub-tabs{
+    margin-left: 81.5%;
+    width: 15%;
+    padding: 10px;
+}
+
+.search-container {
+    display: flex;
+    margin-left: 20px;
+}
+
+#employee-search {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    width: 200px;
+}
+
+#search-button {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #0056b3;
+}
+
+.sub-tabs a {
+    color: #333; /* Darker sub-tab text */
+    display: block;
+    padding: 5px 10px;
+}
+
+.sub-tabs a:hover {
+    background-color: #eee; /* Light gray on sub-tab hover */
+}
+
+main {
+    flex: 1; /* Allow main content to expand */
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+main button {
+    padding: 6px 12px;  /* Adjust padding */
+}
+
+#filter-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#dynamic-inputs {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#filter-button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#filter-button:hover {
+    background-color: #0056b3;
+}
+
+#Applyfilter-button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#Applyfilter-button:hover {
+    background-color: #0056b3;
+}
+
+.hidden {
+    display: none; /* Hide the element */
+}
+
+#Main-options {
+    background-color: #eee;
+}
+
+#filter-buttons > * { /* Style direct children of #filter-buttons */
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0; /* Light gray background for buttons */
+    cursor: pointer;
+    text-decoration: none; /* Remove underlines from links */
+    color: #333;
+}
+
+#filter-buttons button, #filter-buttons a {
+    background-color: #007bff;
+    color: white;
+}
+
+#session-data a{
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+#filter-buttons > *:hover {
+    background-color: #ddd;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Centers items horizontally */
+    align-items: center;
+    gap: 5px;
+    width: fit-content; /* Adjust width as needed */
+    margin: 0 auto; /* centers the container itself */
+}
+
+.page-dropdown {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.active-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.inactive-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#site_data_view{
+    padding: 20px;
+}
+
+#dynamic-inputs {
+    display: flex;
+    gap: 10px; /* Adjust the gap value as needed */
+    padding: auto;
+}
+
+.fieldSelect {
+    width: 100%; /* Default width for smaller screens */
+    max-width: 50%; /* Limit width on larger screens */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+.valueInput {
+    width: 100%; /* Default width for smaller screens */
+    max-width: 50%; /* Limit width on larger screens */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+.location-select {
+    width: 100%; /* Default width for smaller screens */
+    max-width: 50%; /* Limit width on larger screens */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5%;
+}
+
+.styled-table th, .styled-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.styled-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.styled-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Edit icon styles */
+.edit-icon {
+    color: #007bff; /* Blue edit icon */
+    text-decoration: none;
+    margin-left: 5px; /* Space from checkbox */
+}
+
+.edit-icon:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    font-size: 0.9em;
+    border-top: 1px solid #ccc;
+    width: 100%; /* Ensure full width */
+}
+
+/* Hide the session data div if the location is 'all' */
+#session-data[hidden] {
+    display: none;
+}
+
+@media screen and (min-width: 1900px) {
+    /* ... your large screen styles */
+    .sub-tabs {
+        width: 20%;
+        margin-left: 8%;
+    }
+    body{
+        font-size: 22px;
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto;
+    }
+    #Settings-tab input{
+        font-size: 22px;
+    }
+    main {
+        flex-grow: 1; /* Ensures main content expands to push footer down */
+    }
+
+    footer {
+        bottom: 0;
+        margin-top: 5%;
+    }
+}
+
+/* Screens between 1200px and 1899px */
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+    /* ... your medium screen styles */
+    .sub-tabs {
+        width: 18%;
+        margin-left: 7%;
+        
+    }
+    body{
+        font-size: 20px;
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto;
+    }
+    #Settings-tab input{
+        font-size: 20px;
+    }
+
+    footer{
+        bottom: 0;
+        margin-top: auto;
+    }
+}
+
+/* Screens between 900px and 1199px */
+@media screen and (max-width: 1300) and (min-width: 900px) {
+    /* ... your medium-small screen styles */
+    .sub-tabs {
+        width: 20%;
+        margin-left: 8%;
+    }
+    body {
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto; /* Centers the content */
+    }
+
+    main {
+        flex-grow: 1; /* Ensures main content expands to push footer down */
+    }
+
+    footer {
+        bottom: 0;
+        margin-top: auto;
+    }
+    
+}
+
+@media screen and (max-width: 1100px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+    }
+    
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.8rem;
+    }
+    
+    .sub-tabs {
+        position: absolute; /* or fixed */
+        top: 100px;
+        left: 0; /* Changed from 10px */
+        width: 100%; /* Changed from calc */
+        background-color: #343a40;
+        z-index: 1000;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    
+    .sub-tabs a {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    
+    #activity-sub-tabs a,
+    #reports-sub-tabs a,
+    #dailyReport-sub-tabs a,
+    #weeklyReport-sub-tabs a,
+    #BiweeklyReport-sub-tabs a,
+    #Monthly-rollover-sub-tabs a,
+    #Summary-sub-tabs a {
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    #activity-sub-tabs {
+        margin-top: 60px;
+        background-color: #343a40;
+        width: 90%;
+        margin-left: 20px;
+        box-sizing: border-box;
+    }
+
+    #reports-sub-tabs {
+        margin-top: 100px;
+        margin-left: 20px;
+        padding: 10px;
+        background-color: #343a40;
+        width: 90%;
+        box-sizing: border-box;
+    }
+    
+    #dailyReport-sub-tabs {
+        margin-top: 110px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #weeklyReport-sub-tabs {
+        margin-top: 140px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #BiweeklyReport-sub-tabs {
+        margin-top: 170px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Monthly-rollover-sub-tabs {
+        margin-top: 200px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Summary-sub-tabs {
+        margin-top: 230px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+    }
+
+@media screen and (max-width: 768px) {  /* Or adjust breakpoint as needed */
+
+        .fieldSelect {
+            width: auto; /* Default width for smaller screens */
+            max-width: 40%; /* Limit width on larger screens */
+            box-sizing: border-box; /* Include padding and border in width */
+        }
+        
+        .location-select {
+            width: auto; /* Allow natural width on larger screens */
+            max-width: 50%; /* Still limit to 40% on larger screens */
+        }
+
+        .valueInput {
+            width: auto; /* Allow natural width on larger screens */
+            max-width: 50%; /* Still limit to 40% on larger screens */
+        }
+
+    .styled-table {
+        display: block; /* Make the table a block element */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS devices */
+    }
+
+    .styled-table th, .styled-table td {
+        white-space: nowrap; /* Prevent wrapping in table cells */
+        min-width: 150px; /* Or adjust to a suitable minimum width for your columns */
+        font-size: 0.8rem;
+    }
+
+    /* Optional: Style the scrollbar (webkit browsers) */
+    .styled-table::-webkit-scrollbar {
+        width: 8px; /* Adjust scrollbar width */
+        height: 8px; /* Adjust scrollbar height */
+    }
+
+    .styled-table::-webkit-scrollbar-thumb {
+        background-color: #888; /* Adjust scrollbar thumb color */
+        border-radius: 4px;
+    }
+
+    /* Optional: Style the scrollbar (other browsers) */
+    .styled-table {
+        scrollbar-width: thin; /* or auto, or none */
+        scrollbar-color: #888 transparent; /* thumb and track color */
+    }
+
+    h1{
+        font-size: 1.5rem;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+
+    button {
+        font-size: 0.8rem;
+    }
+
+    main a {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    body {
+        max-width: auto; /* Prevents content from stretching too much */
+        margin: 0 auto; /* Centers the content */
+    }
+
+    main {
+        flex-grow: 1; /* Ensures main content expands to push footer down */
+    }
+
+    footer {
+        bottom: 0;
+        margin-top: auto;
+    }
+}

@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="{% static 'site_panel/images/restaurant_icon.png' %}" type="image/png">
+    <title>Employee Payroll</title>
+    <link rel="stylesheet" href="/static/site_panel/css/site_payroll.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/css/pikaday.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script>
+</head>
+<body>
+    <div id="header_main">
+        <header>
+            <nav>
+                <a id="Settings-tab" class="restaurant-name">
+                    <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                    {% if request.session.site_location != "all" %}
+                        {{ request.session.restaurant_name }}
+                    {% endif %}
+                </a>
+                <a href="/site_panel/home/" id="home-page">Home</a>
+                <a href="#" id="activity-tab">Activity Logs</a>
+                <a href="#" id='reports-tab'>Performance Reports</a>
+                <a href="#">Ops & Marketing Toolkit</a>
+                <span class="spacer"></span>
+                <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+            </nav>
+            <div id="activity-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+                <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+                <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+            </div>
+            <div id="reports-sub-tabs" class="sub-tabs">
+                <a href="#" id="Daily-Reports">Daily</a>
+                <a href="#" id="Weekly-Reports">Weekly</a>
+                <a href="#" id="Biweekly-Reports">Biweekly</a>
+                <a href="#" id="Monthly-Reports">Monthly</a>
+                <a href="#" id="Specific-Range-Reports">Specific Range</a>
+            </div>
+            <div id="dailyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+            </div>
+            <div id="weeklyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+                <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+                <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+                <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+            </div>
+            <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+            </div>
+            <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+            </div>
+            <div id="Summary-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+            </div>
+        <script src="/static/site_panel/js/errorHandler.js"></script>
+        </header>
+        <main>
+    </div>
+        <div class="header"> 
+        <h1>Employee Payroll</h1>
+        <div class="location-week">
+            <script>
+                let siteLocation = "{{ request.session.site_location }}";
+            </script>
+            {% if request.session.site_location == "all" %}
+                <div class="location" >
+                    Location: 
+                    <select id="location-select" style="width: 200px;"></select>
+                    <script>
+                        fetch('/site_panel/get-locations/')
+                            .then(response => response.json())
+                            .then(data => {
+                                let select = document.getElementById("location-select");
+                                data.locations.forEach(location => {
+                                    let option = document.createElement("option");
+                                    option.value = location;
+                                    option.textContent = location;
+                                    select.appendChild(option);
+                                });
+                            })
+                            .catch(error => console.error("Error fetching locations:", error));
+                    </script>
+                    
+                </div>
+            {% endif %}
+            <div class="week-end">
+                Week End Date: <input type="date" id="week-end-date">
+            </div>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                    document.getElementById("week-end-date").value = today; // Set it as the default value
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="segmented-control">
+          <input type="radio" name="view" id="employee-view" data-view="employee" checked>
+          <label for="employee-view">By Employee</label>
+      
+          <input type="radio" name="view" id="position-view" data-view="position">
+          <label for="position-view">By Position Type</label>
+        </div>
+        <button id="save-payroll">Save Employee Payroll</button>
+    </div>
+
+    <div class="table-container">
+        <table id='payroll_table'>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position Type</th>
+                    <th>Position</th>
+                    <th>Mon. <br>(2025-02-03)</th>
+                    <th>Tues. <br>(2025-02-04)</th>
+                    <th>Wed. <br>(2025-02-05)</th>
+                    <th>Thu. <br>(2025-02-06)</th>
+                    <th>Fri. <br>(2025-02-07)</th>
+                    <th>Sat. <br>(2025-02-08)</th>
+                    <th>Sun. <br>(2025-02-09)</th>
+                    <th>Totals</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if compensation_data %}  {% for row in compensation_data %}
+                            <tr>
+                                
+                                <td>{{ row.Name }}
+                                    <input type="hidden" id="payroll_emp_id" name="payroll_emp_id" value="{{ row.EmployeeID }}">
+                                    <input type="hidden" id="payroll_comp_id" name="payroll_comp_id" value="{{ row.CompID }}">
+                                </td>
+                                <td>{{ row.Position_Type }}</td>
+                                <td>{{ row.Position }}</td>
+                                <td><input type="number" id='Mon' name='Mon' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Tues' name='Tues' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Weds' name='Weds' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Thurs' name='Thurs' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Fri' name='Fri' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Sat' name='Sat' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+                                <td><input type="number" id='Sun' name='Sun' value="0" min="0" max="24" step="0.01" oninput="validateNumber(this)"></td>
+
+                                <script>
+                                function validateNumber(input) {
+                                    input.value = input.value.replace(/[^0-9.]/g, '');
+                                }
+                                </script>
+                                <td><input type="number" name='totals' default:"0" value:'0' readonly></td>
+                                <td><input id="notes" type="text" ></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+            </tbody>    
+        </table>
+    </div>
+</main>
+<footer>
+    <p>&copy; 2025 Social99. All rights reserved.</p>
+</footer>
+<script>
+    if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            document.getElementById('Sign-Out').addEventListener('click', function () {
+                localStorage.removeItem('activeTab');  // Clear storage to prevent stale token issues
+                sessionStorage.clear();  
+            });
+</script>
+<script src="/static/site_panel/js/site_payroll.js" defer></script>
+</body>
+</html>

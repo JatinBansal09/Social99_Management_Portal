@@ -1,0 +1,408 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'site_panel/images/restaurant_icon.png' %}" type="image/png">
+    <title>Employee Dashboard</title>
+    <link rel="icon" href="/static/images/cropped-99-1-192x192.webp" sizes="192x192">
+    <link rel="stylesheet" href="/static/site_panel/css/Site_Employees_dashboard.css">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div id="Main-options">
+        <header>
+            <nav>
+                <a id="Settings-tab" class="restaurant-name">
+                    <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                    {% if request.session.site_location != "all" %}
+                        {{ request.session.restaurant_name }}
+                    {% endif %}
+                </a>
+                <a href="/site_panel/home/" id="home-page">Home</a>
+                <a href="#" id="activity-tab">Activity Logs</a>
+                <a href="#" id='reports-tab'>Performance Reports</a>
+                <a href="#">Ops & Marketing Toolkit</a>
+                <span class="spacer"></span>
+                {% if request.session.site_location != "all" %}
+                    <a href="#" id="Settings-tab" style="display: none;">
+                        <input type="text" id="location" name="location" value="{{ request.session.site_location }}" readonly hidden>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                {% else %}
+                    <a href="#" id="Settings-tab" style="display: none;">
+                        <input type="text" id="location" name="location" value="Settings" readonly hidden>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                {% endif %}
+                <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+            </nav>
+            <div id="activity-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+                <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+                <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+            </div>
+            <div id="reports-sub-tabs" class="sub-tabs">
+                <a href="#" id="Daily-Reports">Daily</a>
+                <a href="#" id="Weekly-Reports">Weekly</a>
+                <a href="#" id="Biweekly-Reports">Biweekly</a>
+                <a href="#" id="Monthly-Reports">Monthly</a>
+                <a href="#" id="Specific-Range-Reports">Specific Range</a>
+            </div>
+            <div id="dailyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+            </div>
+            <div id="weeklyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+                <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+                <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+                <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+            </div>
+            <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+            </div>
+            <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+            </div>
+            <div id="Summary-sub-tabs" class="sub-tabs">
+                <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+            </div>
+        <script src="/static/site_panel/js/errorHandler.js"></script>
+        </header>
+    <main>
+        
+            <h1>Employee Management Dashboard</h1>
+            <div id="filter-buttons">
+                <div id="sessionDataDiv" data-location="{{ request.session.site_location }}" style="display: none;"></div>
+                {% if request.session.site_location != "all" %}
+                    <a id='NewButton' href="/site_panel/add_new_employee/">Add Employee</a>
+                {% endif %}
+                <button id='download-excel'><span class="icon">&#128190;</span>Excel</button>
+                <form method="GET" id="pagination-form">
+                    <div class="pagination-container">
+                        {% if page_obj and page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&lt;</a>
+                        {% else %}
+                            <button type="button" class="custom-button nav-button" disabled>&lt;</button>
+                        {% endif %}
+                        
+                        <select id="page-select" name="page" class="page-dropdown">
+                            {% for page_num in page_range %}
+                                <option value="{{ page_num }}" {% if page_obj.number == page_num %}selected{% endif %}>{{ page_num }}</option>
+                            {% endfor %}
+                        </select>
+                
+                        <span class="page-info">of {{ paginator.num_pages }}</span>
+                
+                        <select id="per-page" name="per_page" class="page-dropdown paging-group">
+                            <option value="1" {% if per_page == 1 %}selected{% endif %}>1/page</option>
+                            <option value="25" {% if per_page == 25 %}selected{% endif %}>25/page</option>
+                            <option value="50" {% if per_page == 50 %}selected{% endif %}>50/page</option>
+                            <option value="100" {% if per_page == 100 %}selected{% endif %}>100/page</option>
+                            <option value="1000" {% if per_page == 1000 %}selected{% endif %}>1000/page</option>
+                        </select>
+                
+                        {% if page_obj and page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}" class="custom-button nav-button">&gt;</a>
+                        {% else %}
+                            <button type="button" class="custom-button nav-button" disabled>&gt;</button>
+                        {% endif %}
+                        <div class="search-container">
+                            <input type="text" id="employee-search" placeholder="Search employees...">
+                            <button id="search-button"><i class="fas fa-search"></i></button>
+                        </div>
+                        <script>
+                            var siteLocation = "{{ request.session.site_location }}";
+                        </script>
+                                
+                    </div>
+                       
+            </div>
+        
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('employee-search');
+                const table = document.getElementById('styled-table');
+                let searchTimeout = null;
+            
+                // Function to perform the search
+                function performSearch() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    const rows = table.querySelectorAll('tbody tr');
+                    
+                    let anyMatches = false;
+                    
+                    rows.forEach(row => {
+                        const rowText = row.textContent.toLowerCase();
+                        if (searchTerm === '' || rowText.includes(searchTerm)) {
+                            row.style.display = '';
+                            anyMatches = true;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show "no results" message if needed
+                    const noResultsMessage = document.getElementById('no-results-message');
+                    if (!anyMatches && searchTerm !== '') {
+                        if (!noResultsMessage) {
+                            const message = document.createElement('p');
+                            message.id = 'no-results-message';
+                            message.style.textAlign = 'center';
+                            message.style.padding = '20px';
+                            message.style.color = '#6c757d';
+                            message.textContent = 'No matching employees found.';
+                            table.parentNode.insertBefore(message, table.nextSibling);
+                        }
+                    } else if (noResultsMessage) {
+                        noResultsMessage.remove();
+                    }
+                }
+            
+                // Debounced search function
+                function debouncedSearch() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch();
+                    }, 300); // 300ms delay
+                }
+                
+                searchInput.addEventListener('input', debouncedSearch);
+                
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        clearTimeout(searchTimeout);
+                        performSearch();
+                    }
+                });
+                
+                
+                // Initial search to handle any pre-filled values
+                performSearch();
+            });
+            
+        </script>
+
+        <!-- Data View -->
+        <div id="site_data_view" >
+            <!-- Display the data in a table -->
+            <table class="styled-table" id="styled-table">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        {% if request.session.site_location == "all" %}
+                            <th>Location</th>
+                        {% endif %}
+                        <th>Position</th>
+                        <th>Owner</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Primary Contact</th>
+                        <th>Secondary Contact</th>
+                        <th>Smart Serve #</th>
+                        <th id="edit-delete">Edit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% if employee_data %}  {% for row in employee_data %}
+                            <tr>
+                                <td>{{ row.Ename }}</td>
+                                {% if request.session.site_location == "all" %}
+                                    <td>{{ row.Location }}</td>
+                                {% endif %}
+                                <td>{{ row.Position | default:'' }}</td>
+                                <td style="text-align: center;">{{ row.Owner | default:'-' }}</td>
+                                <td>{{ row.StartDate | default:'' }}</td>
+                                <td style="text-align: center;">{{ row.EndDate | default:'-' }}</td>
+                                <td>{{ row.Phone1 | default:'' }}</td>
+                                <td style="text-align: center;">{{ row.Phone2 | default:'-' }}</td>
+                                <td style="text-align: center;">{{ row.SmartServer | default:'-' }}</td>
+                                <td id="edit-delete" ><a class="edit-icon" data-empid="{{ row.EmployeeID }}"><i class="fas fa-edit"></i></a></td>
+                                <td>
+                                    <button class="toggle-btn {% if row.active_inactive %}active-btn{% else %}inactive-btn{% endif %}" onclick="toggleActiveInactive({{ row.EmployeeID }}, {% if row.active_inactive %}0{% else %}1{% endif %})">
+                                        {% if row.active_inactive %}
+                                            Active
+                                        {% else %}
+                                            Inactive
+                                        {% endif %}
+                                    </button>
+                                    
+                                    <script>
+                                        function getCSRFToken() {
+                                            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                                            return csrfToken;
+                                        }
+
+                                        async function toggleActiveInactive(empID, currentStatus) {
+                                            try {
+                                                console.log("Toggling Superuser for Site ID:", empID, "New Status:", currentStatus);
+                                                const response = await fetch('/site_panel/update-employee-status/', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCSRFToken(),
+                                                    },
+                                                    body: JSON.stringify({ empid: empID, active_inactive: currentStatus })
+                                                });
+                                        
+                                                const result = await response.json();
+                                                console.log("Response from server:", result);  // Debugging line
+                                                if (result.success) {
+                                                    alert(result.message);
+                                                    window.location.reload();
+                                                } else {
+                                                    alert(result.message);
+                                                }
+                                            } catch (error) {
+                                                console.error('Error updating superuser status:', error);
+                                            }
+                                        }
+                                       
+                                    </script>
+                                                                       
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <form id="csrf-form" style="display:none; margin: 10px auto; margin-bottom:10%;">{% csrf_token %}
+            {% if no_results %}
+            <p style="margin: 10px auto;">No records found.</p>
+            {% elif invalid_page %}
+                <p style="margin: 10px auto;">Invalid page number.</p>
+            {% endif %}
+        </form>
+        </form>
+
+
+        <script type="module">
+            import { parse, format } from 'https://cdn.skypack.dev/date-fns';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteButton = document.getElementById('Data-Delete');
+                const newButton = document.getElementById('NewButton');
+                const sessionDataDiv = document.getElementById("sessionDataDiv");
+                const siteLocation = "{{ request.session.site_location }}";
+        
+                if (siteLocation !== 'all') {
+                    sessionDataDiv.removeAttribute('hidden'); // Remove hidden
+                } else {
+                    newButton.style.display = 'none';
+                    sessionDataDiv.setAttribute('hidden', ''); // Add hidden (setting it to any value makes it hidden)
+                    // Or: sessionDataDiv.hidden = true;  // More concisely, for the 'hidden' attribute
+                }
+                // Listen for change events on the header checkbox
+
+                const editIcons = document.querySelectorAll('.edit-icon');
+
+                editIcons.forEach(icon => {
+                    icon.addEventListener('click', function(event) {
+                        event.preventDefault();
+                
+                        const row = icon.closest('tr');
+                        const statusBtn = row.querySelector('.toggle-btn');
+                        const statusText = statusBtn ? statusBtn.textContent.trim() : '';
+                
+                        if (statusText === 'Active') {
+                            const empid = icon.dataset.empid;
+                            const url = `/site_panel/update_employee_data/?empl_details=${encodeURIComponent(JSON.stringify([{ e_id: empid }]))}`;
+                            window.location.href = url;
+                        } else {
+                            alert("Editing is only allowed for Active employees.");
+                        }
+                    });
+                });
+                
+                
+                document.getElementById('download-excel').addEventListener('click', function() {
+                    // Get the table
+                    const table = document.getElementById('styled-table');
+            
+                    // Convert the table to a worksheet
+                    const worksheet = XLSX.utils.table_to_sheet(table);
+                    
+                    // Create a workbook with the worksheet
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+                    
+                    // Generate the Excel file and trigger download
+                    XLSX.writeFile(workbook, 'table_data.xlsx');
+                  });
+
+                  if (localStorage.getItem('activeTab'))
+                        {
+                            if (!sessionStorage.getItem('isRefreshed')) {
+                                sessionStorage.setItem('isRefreshed', 'true');
+                            }
+                        
+                            // Flag to track navigation
+                            let isNavigating = false;
+                        
+                            // Listen for link clicks or form submissions
+                            document.addEventListener('click', function (event) {
+                                if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                                    isNavigating = true;
+                                }
+                            });
+                        
+                            // Listen for form submissions
+                            document.addEventListener('submit', function () {
+                                isNavigating = true;
+                            });
+                        
+                            // Clear localStorage only when the tab is closed
+                            window.addEventListener('beforeunload', function () {
+                                if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                                    // Tab is being closed, clear activeTab
+                                    localStorage.removeItem('activeTab');
+                                } else {
+                                    // Page is being refreshed or navigated, keep activeTab
+                                    sessionStorage.removeItem('isRefreshed');
+                                }
+                            });
+                
+                  }
+                  document.getElementById('Sign-Out').addEventListener('click', function (event) {
+                            // Remove activeTab from localStorage
+                            localStorage.removeItem('activeTab');
+                            // Allow the default navigation to proceed
+                  });
+            
+                  document.querySelectorAll(".status-toggle").forEach(toggle => {
+                    toggle.addEventListener("change", function () {
+                        let empId = this.dataset.empid;
+                        let newStatus = this.checked ? "Active" : "Inactive";
+            
+                        console.log(`Employee ${empId} status changed to:`, newStatus);
+            
+                        // Optional: Send update request to the server
+                        fetch('/update-employee-status/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCSRFToken()
+                            },
+                            body: JSON.stringify({ EmployeeID: empId, active_inactive: newStatus })
+                        }).then(response => response.json())
+                          .then(data => console.log("Update successful:", data))
+                          .catch(error => console.error("Error updating status:", error));
+                    });
+                });
+            });
+            
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2025 Social99. All rights reserved.</p>
+    </footer>
+    <script src="/static/site_panel/js/Site_Employees_dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/site_panel/css/Site_new_activity_tracker_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="Settings-tab" class="restaurant-name">
+                <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                {% if request.session.site_location != "all" %}
+                    {{ request.session.restaurant_name }}
+                {% endif %}
+            </a>
+            <a href="/site_panel/home/" id="home-page">Home</a>
+            <a href="#" id="activity-tab">Activity Logs</a>
+            <a href="#" id='reports-tab'>Performance Reports</a>
+            <a href="#">Ops & Marketing Toolkit</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+        </nav>
+        <div id="activity-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+            <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+            <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+        </div>
+        <div id="reports-sub-tabs" class="sub-tabs">
+            <a href="#" id="Daily-Reports">Daily</a>
+            <a href="#" id="Weekly-Reports">Weekly</a>
+            <a href="#" id="Biweekly-Reports">Biweekly</a>
+            <a href="#" id="Monthly-Reports">Monthly</a>
+            <a href="#" id="Specific-Range-Reports">Specific Range</a>
+        </div>
+        <div id="dailyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+        </div>
+        <div id="weeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+            <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+            <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+            <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+        </div>
+        <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+        </div>
+        <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+        </div>
+        <div id="Summary-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+        </div>
+    <script src="/static/site_panel/js/errorHandler.js"></script>
+    </header>
+    <main>
+        <h2>Edit Daily Activity Record</h2>
+        <h5><a href="/site_panel/daily_activity_tracking_dashboard/">&lt;&lt;Daily Activity Tracking Dashboard</a></h5>
+        <div id="Activity_forms">
+            <button data-target="sales-form" id="Sales_button">Sales</button>
+            <button data-target="promotions-form" id="Promotions_button">Promotions</button>
+            <button data-target="financial-form" id="Financial_button">Financial</button>
+            <button data-target="purchases-form" id="Purchases_button">Purchases</button>
+            <button data-target="paid-out-form" id="Paid_out_button">PaidOut</button>
+             <!-- Added Promotions button -->
+        </div>
+        <div class="form-section" id='sales-form'>
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Current Date -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="activity_date">Date<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="date" id="activity_date" name="activity_date" value="{{ sales.activity_date|date:'Y-m-d' }}" readonly required>
+                    </div>
+                </div>
+
+                <input type="number" id="sales_id" name="sales_id" value="{{ sales.sales_id }}" hidden>
+                <input type="number" id="sales_site_id" name="sales_site_id" value="{{ site_id }}" hidden>
+
+                <!-- Location -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="location">Location<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="location" name="location" value="{{ request.session.site_location }}" readonly required>
+                    </div>
+                </div>
+        
+                <!-- Food -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="food">Food<span>*</span> :</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="food_sales" name="food_sales" value="{{ sales.food|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" required readonly>
+                    </div>
+                </div>
+        
+                <!-- Liquor -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="liquor">Liquor:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="liquor_sales" name="liquor_sales" value="{{ sales.liquor|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="beer">Beer:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="beer_sales" name="beer_sales" value="{{ sales.beer|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="wine">Wine:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="wine_sales" name="wine_sales" value="{{ sales.wine|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="beverages_iced_beverages">Beverages- iced beverages:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="beverages_iced_beverages_sales" name="beverages_iced_beverages_sales" value="{{ sales.beverages_iced_beverages|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="draft">Draft:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="draft_sales" name="draft_sales" value="{{ sales.draft|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="honest_to_goodness_fees">Honest to Goodness Fees<span>*</span> :</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="honest_to_goodness_fees_sales" name="honest_to_goodness_fees_sales" value="{{ sales.honest_to_goodness_fees|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" required readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="miscellaneous_income">Miscellaneous-income :</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="miscellaneous_income_sales" name="miscellaneous_income_sales" value="{{ sales.miscellaneous_income|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Total -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="sales_total">Total:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="sales_total" class="total" name="sales_total" value="{{ sales.sales_total|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly readonly>
+                    </div>
+                </div>
+        
+                <!-- Sales Tax 1 -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="sales_tax1">Sales Tax 1:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="sales_tax1" name="sales_tax1" value="{{ sales.sales_tax1|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" placeholder='Enter the value in percentage' readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="sales_tax2">Sales Tax 2:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="sales_tax2" name="sales_tax2" value="{{ sales.sales_tax2|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" placeholder='Enter the value in percentage' readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="liquor_tax_1">Liquor Tax 1:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="liquor_tax_1" name="liquor_tax_1" value="{{ sales.liquor_tax_1|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" placeholder='Enter the value in percentage' readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="customer_count">Customer Count<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="customer_count" name="customer_count" value="{{ sales.customer_count|default:0 }}" required readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="notes">Notes:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="notes" id="notes" value="{{ sales.sales_notes }}" readonly>
+                    </div>
+                </div>
+
+                <p id="general-error" class="error-message" style="color: red;"></p>
+        
+                <!-- Submit Button -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <button type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>            
+        <div class="form-section" id="promotions-form" data-tab="promotions-form">
+            <form id="PromotionsForm" method="POST">
+                {% csrf_token %}
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="staff_meals">Staff's Meal:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotions_staff_meals" value="{{ promotions.staff_meals|default:0 }}" id="promotions_staff_meals" readonly>
+                    </div>
+                </div>
+
+                <input type="number" id="promotions_id" name="promotions_id" value="{{ promotions.promotions_id }}" hidden>
+                <input type="number" id="promotions_site_id" name="promotions_site_id" value="{{ promotions.site_id }}" hidden>
+                <input type="date" id="promotions_activity_date" name="promotions_activity_date" value="{{ sales.activity_date|date:'Y-m-d' }}" hidden>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="manager_meals">Manager's Meal:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_manager_meals" id="promotion_manager_meals" value="{{ promotions.manager_meals|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="chucks_bucks">Chucks Bucks:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_chucks_bucks" id="promotion_chucks_bucks" value="{{ promotions.chucks_bucks|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="coupons_disc">Coupons and Discounts:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_coupons_disc" id="promotion_coupons_disc" value="{{ promotions.coupons_disc|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="manager_prom">Manager Promotions:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_manager_prom" id="promotion_manager_prom" value="{{ promotions.manager_prom|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="qsa_complaints">QSA Complaints (Total Free Food Daily):</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_qsa_complaints" id="promotion_qsa_complaints" value="{{ promotions.qsa_complaints|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="lsm_1">LSM1:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_lsm_1" id="promotion_lsm_1" value="{{ promotions.lsm_1|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="lsm_2">LSM2:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_lsm_2" id="promotion_lsm_2" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ promotions.lsm_2|default:0 }}" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="promotion_total">Total:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="promotion_total" id="promotion_total" value="{{ promotions.promotion_total|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+
+                <p id="general-error" class="error-message" style="color: red;"></p>
+        
+                <div class="input-box">
+                    <div class="input-field" id="Promotions_button">
+                        <button type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+        <div class="form-section" id="financial-form" data-tab="financial-form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="gift_card_purchased">Gift Card Purchased:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_gift_card_purchased" id="financial_gift_card_purchased" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.gift_card_purchased|default:0 }}" readonly>
+                    </div>
+                </div>
+
+                <input type="number" id="financial_id" name="financial_id" value="{{ financial.financial_id }}" hidden>
+                <input type="number" id="financial_site_id" name="financial_site_id" value="{{ site_id }}" hidden>
+                <input type="date" id="financial_activity_date" name="financial_activity_date" value="{{ sales.activity_date|date:'Y-m-d' }}" hidden>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="gift_card_redeemed">Gift Card Redeemed:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_gift_card_redeemed" id="financial_gift_card_redeemed" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.gift_card_redeemed|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="skip_the_dishes">Skip the Dishes:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_skip_the_dishes" id="financial_skip_the_dishes" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.skip_the_dishes|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="just_eat">Just Eat:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_just_eat" id="financial_just_eat" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.just_eat|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="amex">American Express:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_amex" id="financial_amex" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.amex|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="din_club">Diners Club:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_din_club" id="financial_din_club" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.din_club|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="discover">Discover:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_discover" id="financial_discover" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.discover|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="master_card">Master-card:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_master_card" id="financial_master_card" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.master_card|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="visa">Visa:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_visa" id="financial_visa" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.visa|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="dr_card">Debit Card:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_dr_card" id="financial_dr_card" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.dr_card|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="financial_total">Total (Credit/Debit):</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="financial_total" id="financial_total" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.financial_total|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="actual_deposit_amt">Actual Deposit Amount:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="actual_deposit_amt" id="actual_deposit_amt" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.actual_deposit_amt|default:0 }}" readonly>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="required_deposit">Required Deposit:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="required_deposit" id="required_deposit" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" value="{{ financial.required_deposit|default:0 }}" data-initial="{{ financial.required_deposit|default:0 }}" readonly>
+                    </div>
+                </div>
+
+                <p id="financial-general-error" class="error-message" style="color: red;"></p>
+                <div class="input-box">
+                    <div class="input-field" id="Financial_button">
+                        <button type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-section" id="purchases-form" data-tab="purchases-form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="purchases_food">Food:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="purchases_food" name="purchases_food" value="{{ purchase.purchases_food|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+                
+                <input type="number" id="purchase_id" name="purchase_id" value="{{ purchase.purchase_id }}" hidden>
+                <input type="number" id="purchase_site_id" name="purchase_site_id" value="{{ site_id }}" hidden>
+                <input type="date" id="purchases_activity_date" name="purchases_activity_date" value="{{ sales.activity_date|date:'Y-m-d' }}" hidden>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="purchases_paper">Paper:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="purchases_paper" name="purchases_paper" value="{{ purchase.purchases_paper|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="purchases_liquor">Liquor:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="purchases_liquor" name="purchases_liquor" value="{{ purchase.purchases_liquor|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+
+                <p id="purchases-general-error" class="error-message" style="color: red;"></p>
+        
+                <div class="input-box">
+                    <button type="submit">Save</button>
+                </div>
+            </form>      
+        </div>
+
+        <div class="form-section" id="paid-out-form" data-tab="paid-out-form">
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Food -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="food_paid_out">Food:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="food_paid_out" id="food_paid_out" value="{{ paid_out.food_paid_out|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+
+                <input type="number" id="paid_out_id" name="paid_out_id" value="{{ paid_out.paid_out_id }}" hidden>
+                <input type="number" id="paid_out_site_id" name="paid_out_site_id" value="{{ site_id }}" hidden>
+                <input type="date" id="paid_out_activity_date" name="paid_out_activity_date" value="{{ sales.activity_date|date:'Y-m-d' }}" hidden>
+        
+                <!-- Liquor -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="liquor_paid_out">Liquor:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="liquor_paid_out" id="liquor_paid_out" value="{{ paid_out.liquor_paid_out|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Supplies -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="supplies_paid_out">Supplies:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="supplies_paid_out" id="supplies_paid_out" value="{{ paid_out.supplies_paid_out|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Repair & Maintenance -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="repair_maintenance">Repair and Maintenance:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="repair_maintenance_paid_out" id="repair_maintenance_paid_out" value="{{ paid_out.repair_maintenance|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Advertising -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="advertising">Advertising:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="advertising_paid_out" id="advertising_paid_out" value="{{ paid_out.advertising|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Entertainment -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="entertainment">Entertainment:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="entertainment_paid_out" id="entertainment_paid_out" value="{{ paid_out.entertainment|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Other -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="others">Other:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="others_paid_out" id="others_paid_out" value="{{ paid_out.others|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- HST/GST -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="hst_gst">HST/GST:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="hst_gst_paid_out" id="hst_gst_paid_out" value="{{ paid_out.hst_gst|default:0 }}" step="0.01" inputmode="decimal" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
+                    </div>
+                </div>
+        
+                <!-- Total -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="paid_out_total">Total:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" name="paid_out_total" id="paid_out_total" value="{{ paid_out.paid_out_total|default:0 }}" readonly>
+                    </div>
+                </div>
+
+                <p id="paidout-general-error" class="error-message" style="color: red;"></p>
+        
+                <!-- Save Button -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <button type="submit" id="paid-out">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+        
+    </main>
+    <footer>
+        <p>&copy; 2025 Social99. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            localStorage.setItem('site_username', '{{ request.session.user_name|escapejs }}');
+            if (!localStorage.getItem("activeTab")) {
+                localStorage.setItem("activeTab", "true");
+            }
+        
+            // Prevent logout on refresh
+            window.addEventListener("beforeunload", function (event) {
+                if (!sessionStorage.getItem("isNavigating")) {
+                    event.preventDefault();
+                    localStorage.setItem("activeTab", "true");
+                }
+            });
+        
+            // Track user navigation
+            document.addEventListener("click", function (event) {
+                if (event.target.tagName === "A" || event.target.tagName === "BUTTON") {
+                    sessionStorage.setItem("isNavigating", "true");
+                }
+            });
+        
+            // Ensure Sign-Out clears storage
+            let signOutButton = document.getElementById("Sign-Out");
+            if (signOutButton) {
+                signOutButton.addEventListener("click", function () {
+                    localStorage.removeItem("activeTab");
+                    sessionStorage.clear();
+                });
+            }
+        });
+        
+    </script>
+    <script src="/static/site_panel/js/Site_Edit_Daily_Activity_Tracker.js"></script>
+</body>
+</html>

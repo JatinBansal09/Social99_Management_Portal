@@ -1,0 +1,316 @@
+body {
+    font-family: Arial, sans-serif;
+    background-attachment:fixed;
+    overflow-x: hidden; 
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+  
+  
+header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+}
+
+    nav {
+        display: flex;
+        align-items: center;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+    }
+
+    nav a:hover {
+        border-top: 3px solid white;
+        margin-top: 0;
+        display: inline-block; /* Ensures proper alignment */
+    }
+
+    nav a.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    }
+  .spacer {
+        flex-grow: 1;
+    }
+    
+  #settings-icon {
+        font-size: 18px;
+        color: white;
+    }
+  
+  .sub-tabs {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        z-index: 1;
+    }
+  
+  #Settings-sub-tabs{
+        margin-left: 90.5%;
+        width: 6.5%;
+        padding: 10px;
+    }
+  
+  .sub-tabs a {
+        color: #343a40;
+        display: block;
+        padding: 5px 10px;
+    }
+    
+  .sub-tabs a:hover {
+        background-color: #eee;
+    }
+    
+  main {
+        flex: 1; /* Key: Allow main content to expand */
+        padding: 60px;
+    }
+
+
+h1 {
+    text-align: center;
+    margin: 80px 0;
+    color:black;
+}
+
+table {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 15px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 15px;
+    text-align: center;
+}
+
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+td button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #343a40;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+td button:hover {
+    background-color: #c5cccc;
+}
+
+td {
+    align-items: center;
+    text-align: center;
+}
+
+td span {
+    cursor: pointer;
+    color: #343a40;
+    font-size: 16px;
+}
+
+td span:hover {
+    color: #689a7e;
+}
+
+.inactive-row {
+    color: gray;
+}
+  /* Modal Styling */
+  #passwordModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+#passwordModal .modal-content {
+    position: relative;
+    margin: 15% auto;
+    background: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+#passwordModal input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#passwordModal button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#passwordModal .submit-btn {
+    background-color: #333;
+    color: white;
+}
+
+#passwordModal .submit-btn:hover {
+    background-color: #333;
+}
+
+#passwordModal .cancel-btn {
+    background-color: #ccc;
+}
+
+#passwordModal .cancel-btn:hover {
+    background-color: #999;
+}
+
+footer {
+    align-items: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    font-size: 0.9em;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+}
+
+
+@media screen and (max-width: 768px) {
+
+    nav a {
+        font-size: 0.8rem;
+    }
+
+    .sub-tabs a {
+        font-size: 0.7rem;
+    }
+
+    #settings-icon {
+        font-size: 0.9rem;
+        }
+
+    main{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.7rem;
+    }
+    
+    table{
+        font-size: 0.8rem;
+    }
+
+    .sitesTable {
+        width: auto; /* Allow the table to expand naturally */
+        display: table; /* Ensure the table is treated as a table */
+    }
+
+    th{
+        font-size: 0.8rem;
+    }
+
+    .sitesTable th, .sitesTable td {
+        white-space: nowrap;
+        min-width: 150px;
+    }
+
+    .sitesTable::-webkit-scrollbar {
+        width: 8px; /* Adjust scrollbar width */
+        height: 8px; /* Adjust scrollbar height */
+    }
+
+    .sitesTable::-webkit-scrollbar-thumb {
+        background-color: #888; /* Adjust scrollbar thumb color */
+        border-radius: 4px;
+    }
+
+    .sitesTable {
+        scrollbar-width: thin; /* or auto, or none */
+        scrollbar-color: #888 transparent; /* thumb and track color */
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+
+    button {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+    nav a {
+      font-size: 18px;
+  }
+  
+  .sub-tabs a {
+      font-size: 18px;
+  }
+
+  #settings-icon {
+    font-size: 20px;
+  }
+  
+  main{
+      font-size: 18px;
+  }
+  
+  table{
+    font-size: 18px;
+  }
+  
+  th{
+    font-size: 18px;
+    }
+  
+  footer {
+      font-size: 18px;
+  }
+  
+  button {
+      font-size: 18px;
+  }
+  }

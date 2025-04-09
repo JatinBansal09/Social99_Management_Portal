@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set New Password</title>
+    <link rel="stylesheet" href="/static/site_panel/css/new_pass_set.css">
+</head>
+<body>
+    <h1>Set New Password</h1>
+    <br>
+    <center>
+        <!-- Form to set the new password -->
+        <form id="newPasswordForm" name="newPasswordForm">
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="newPassword">New Password:</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="newPassword" id="newPassword" required placeholder="Enter the new password">
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="rePassword">Confirm Password:</label> <!-- Fixed `for` attribute -->
+                </div>
+                <div class="input-field">
+                    <input type="password" name="rePassword" id="rePassword" required placeholder="Re-enter the password"> <!-- Fixed `name` -->
+                </div>
+            </div>
+            <button type="submit">Set New Password</button>
+        </form>
+    </center>
+    <div id="message"></div>
+    <script src="/static/site_panel/js/new_pass.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            
+        });
+    </script>
+</body>
+</html>

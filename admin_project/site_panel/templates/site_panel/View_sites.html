@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Sites</title>
+    <link rel="icon" href="/static/images/cropped-99-1-192x192.webp" sizes="192x192">
+    <link rel="stylesheet" href="/static/site_panel/css/View_sites.css">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="/site_panel/admin/dashboard/" id="home-page">Home</a>
+            <a href="/site_panel/create_site/">Create Site</a>
+            <a href="/site_panel/viewSites/">View Sites</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/admin_logout/" id="Sign-Out">Logout</a>
+        </nav>
+    </header>
+
+    <main style=" background-size: cover;">
+        <table id="sitesTable">
+            <thead>
+                <tr>
+                    <th id='currentSiteId'>ID</th>
+                    <th>Site Name</th>
+                    <th>Address</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Change Password</th>
+                    <th>Status</th>
+                    <th>Superuser</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+
+        <div id="passwordModal">
+            <div class="modal-content">
+                <h2>Update Password</h2>
+                <input type="password" id="newPasswordInput" placeholder="Enter new password">
+                <br>
+                <button class="submit-btn" onclick="submitPassword()">Submit</button>
+                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; {{ year }} Social99. All rights reserved.</p>
+    </footer>
+    <script src="/static/site_panel/js/View_sites.js">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            
+        });
+    </script>
+</body>
+</html>

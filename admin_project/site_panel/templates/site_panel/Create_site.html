@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create_site</title>
+    <link rel="icon" href="/static/images/cropped-99-1-192x192.webp" sizes="192x192">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/site_panel/css/Create_site.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/site_panel/admin/dashboard/" id="home-page">Home</a>
+            <a href="/site_panel/create_site/">Create Site</a>
+            <a href="/site_panel/viewSites/">View Sites</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/admin_logout/" id="Sign-Out">Logout</a>
+        </nav>
+    </header>
+<main>
+    <form id="CreateSiteForm">
+        {% csrf_token %}
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="username" id='username'>Site Name:</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="site-name" name="site-name" placeholder="Enter site name" required pattern="[A-Za-z0-9\s]{3,50}">
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="address" >Address:</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="address" name="address" style="margin-left: 53%; width: 137%;"  placeholder="Select location">
+                </div>
+                <div class="input-field" id="map-id">
+                    <span id="maps-icon" title="Open Map" style="margin-left:90%;">📍</span>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="username">Username:</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="username" required>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="password">Password:</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="password" required>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <label for="password">Re-enter Password:</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="check_password" required>
+                </div>
+            </div>
+            <br>
+            <button type="submit" style="display: block; margin: 15px auto;">
+              Submit
+            </button>
+            <div id="message"></div>
+    </form>
+
+    <div id="overlay">
+    </div>
+    <div id="map-modal">
+        <div id="map">
+        </div>
+        <a href="#" id="close-modal">Close Map</a>
+    </div>
+</main>
+    <footer>
+        <p>&copy; {{ year }} Social99. All rights reserved.</p>
+    </footer>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFtHG3-1cz8UVsV-oey0pZbuaf8gvZyvQ&libraries=places"></script>
+    <script src="/static/site_panel/js/Create_site.js">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            
+        });
+    </script>
+</body>
+</html>

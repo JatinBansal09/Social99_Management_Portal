@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="/static/site_panel/css/email_otp_verification.css">
+</head>
+<body>
+    <div class="wrapper">
+        <form method="POST" action="/reset_password" id="resetPasswordForm">
+            {% csrf_token %}
+            <label for="email">Email:</label>
+            <input type="email" name="email" id='email' required placeholder="Enter your email to reset the password.......">
+            <button type="submit">Send Reset Code</button>
+        </form>
+        <div id="message"></div>
+        <div id="verifyCodeForm" style="display:none;">
+            {% csrf_token %}
+            <form id="verifyForm" method="POST">
+                <label for="text"><b>Reset Code:</b></label>
+                <input type="text" name="reset_code" id="reset_Code" placeholder="Enter Reset Code" required>
+                <button type="submit">Verify Code</button>
+            </form>
+        </div>
+    </div>
+    <div id="resetMessage"></div>
+    <p>&copy; 2025 Designed and Developed at ACS</p>
+    <script src="/static/site_panel/js/email_otp_verification.js">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            if (localStorage.getItem('activeTab'))
+            {
+                if (!sessionStorage.getItem('isRefreshed')) {
+                    sessionStorage.setItem('isRefreshed', 'true');
+                }
+            
+                // Flag to track navigation
+                let isNavigating = false;
+            
+                // Listen for link clicks or form submissions
+                document.addEventListener('click', function (event) {
+                    if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                        isNavigating = true;
+                    }
+                });
+            
+                // Listen for form submissions
+                document.addEventListener('submit', function () {
+                    isNavigating = true;
+                });
+            
+                // Clear localStorage only when the tab is closed
+                window.addEventListener('beforeunload', function () {
+                    if (!isNavigating && !sessionStorage.getItem('isRefreshed')) {
+                        // Tab is being closed, clear activeTab
+                        localStorage.removeItem('activeTab');
+                    } else {
+                        // Page is being refreshed or navigated, keep activeTab
+                        sessionStorage.removeItem('isRefreshed');
+                    }
+                });
+    
+            }
+            
+        });
+    </script>
+</body>
+</html>

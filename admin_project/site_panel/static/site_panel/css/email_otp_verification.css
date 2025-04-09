@@ -1,0 +1,56 @@
+body {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center horizontally */
+    min-height: 100vh;      /* Ensure body takes up full viewport height */
+    margin: 0;             /* Remove default body margins */
+    background-size: cover;
+    background-color: white;
+    background-position: center;
+    color: black;
+    overflow-x: hidden;
+}
+
+/* Wrapper to replace <center> */
+.wrapper {
+    background-color: #ffffff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px; /* Keeps form responsive */
+}
+
+form {
+    width: 120%; /* Start with a percentage width */
+    max-width: 500px;
+    margin-left: -13%;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Ensures text is centered */
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: black;            
+    cursor: pointer;
+    transition: background 0.3s ease;
+    color: white;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#message, #resetMessage {
+    margin: 5px;
+}

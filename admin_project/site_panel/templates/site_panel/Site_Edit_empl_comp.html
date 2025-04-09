@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'site_panel/images/restaurant_icon.png' %}" type="image/png">
+    <title>Edit Employee Compensation</title>
+    <link rel="stylesheet" href="/static/site_panel/css/e_new_comp_create.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="Settings-tab" class="restaurant-name">
+                <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+                {% if request.session.site_location != "all" %}
+                    {{ request.session.restaurant_name }}
+                {% endif %}
+            </a>
+            <a href="/site_panel/home/" id="home-page">Home</a>
+            <a href="#" id="activity-tab">Activity Logs</a>
+            <a href="#" id='reports-tab'>Performance Reports</a>
+            <a href="#">Ops & Marketing Toolkit</a>
+            <span class="spacer"></span>
+            <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+        </nav>
+        <div id="activity-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+            <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+            <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+        </div>
+        <div id="reports-sub-tabs" class="sub-tabs">
+            <a href="#" id="Daily-Reports">Daily</a>
+            <a href="#" id="Weekly-Reports">Weekly</a>
+            <a href="#" id="Biweekly-Reports">Biweekly</a>
+            <a href="#" id="Monthly-Reports">Monthly</a>
+            <a href="#" id="Specific-Range-Reports">Specific Range</a>
+        </div>
+        <div id="dailyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+        </div>
+        <div id="weeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+            <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+            <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+            <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+        </div>
+        <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+        </div>
+        <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+        </div>
+        <div id="Summary-sub-tabs" class="sub-tabs">
+            <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+        </div>
+    <script src="/static/site_panel/js/errorHandler.js"></script>
+    </header>
+    <main>
+        <h2>Edit Employee Compensation</h2>
+        <h5><a href="/site_panel/employee_management_dashboard/">&lt;&lt;Back to Employees Dashboard</a></h5>
+        <div id="Employee_form">
+            <button id="NewEmployees_button">Employee</button>
+            <button data-target="Compensation-form" id="Compensation_button">Compensation</button>
+            <script>
+                document.getElementById("NewEmployees_button").addEventListener("click", function() {
+                    window.location.href = `/site_panel/update_employee_data/?empl_details=${encodeURIComponent(JSON.stringify([{ e_id: compensation.e_id }]))}`;
+                });
+            </script>
+        </div>
+        <div class="form-section" id='Compensation-form' active>
+            <form method="POST">
+                {% csrf_token %}
+                <!-- Current Date -->
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_Compensation_name">Employee Name<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="employee_Compensation_name" name="employee_Compensation_name" value="{{ compensation.employee_compensation_name }}" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" readonly reuired>
+                    </div>
+                </div>
+
+                <input type="number" id="compensation_id" name="compensation_id" value="{{ compensation.c_id }}" hidden>
+                <input type="number" id="e_id" name="e_id" value="{{ compensation.e_id }}" hidden>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_position">Position<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="employee_position" name="employee_position" value="{{ compensation.e_position }}" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_position_type">Position Type<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <select id="employee_position_type" name='employee_position_type' class="position-type" value="{{ compensation.e_position_type }}" required>
+                            <option value="Front of the House">Front of the House</option>
+                            <option value="Back of the House">Back of the House</option>
+                            <option value="Staff/Supervisor">Staff/Supervisor</option>
+                            <option value="Management/Owner">Management/Owner</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_rate_type">Rate Type<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="employee_rate_type" name="employee_rate_type" class="employee_rate_type" value="{{ compensation.e_rate_type }}" readonly required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_rate">Rate<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="employee_rate" name="employee_rate" value="{{ compensation.e_rate }}" readonly required>
+                    </div>
+                </div>
+                
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="e_compensation_effective_date">Effective Date<span>*</span>:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="date" id="e_compensation_effective_date" name="e_compensation_effective_date" value="{{ compensation.e_compensation_ffective_Date|date:'Y-m-d' }}" readonly required>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <div class="input-field">
+                        <label for="employee_compensation_end_date">End Date:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="date" id="employee_compensation_end_date" name="employee_compensation_end_date" value="{{ compensation.e_comp_end_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+
+                <p id="general-error" class="error-message" style="color: red;"></p>
+            
+                <!-- Submit Button -->
+                <div class="input-box">
+                    <div class="input-field">
+                        <button type="submit">Save</button>
+                    </div>
+                </div>
+            </form>  
+        </div>      
+    </main>
+    <footer>
+        <p>&copy; 2025 Social99. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if activeTab exists
+            if (localStorage.getItem('activeTab') === 'false') {
+                localStorage.setItem('activeTab', 'true'); // Reset it back to 'true' after refresh
+            } else if (!localStorage.getItem('activeTab')) {
+                // If no activeTab, user is not logged in, redirect to login page
+                window.location.href = "/site_panel/site_logout/";
+            }
+    
+            // Track if the user is navigating
+            let isNavigating = false;
+    
+            document.addEventListener('click', function (event) {
+                if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                    let targetHref = event.target.getAttribute('href');
+                    if (targetHref && !targetHref.startsWith('#')) { // Ignore same-page links
+                        isNavigating = true;
+                    }
+                }
+            });
+    
+            document.addEventListener('submit', function () {
+                isNavigating = true;
+            });
+    
+            // Handle tab close vs. refresh vs. navigation
+            window.addEventListener('beforeunload', function () {
+                if (!isNavigating) {
+                    // If tab is closed, remove activeTab
+                    localStorage.removeItem('activeTab');
+                } else {
+                    // If page is refreshed, set activeTab to false
+                    localStorage.setItem('activeTab', 'false');
+                }
+            });
+    
+            // Ensure Sign-Out clears activeTab
+            let signOutButton = document.getElementById('Sign-Out');
+            if (signOutButton) {
+                signOutButton.addEventListener('click', function () {
+                    localStorage.removeItem('activeTab');
+                    sessionStorage.clear();
+                });
+            }
+        });
+    </script> 
+    <script src="/static/site_panel/js/e_edit_comp.js"></script>
+</body>
+</html>

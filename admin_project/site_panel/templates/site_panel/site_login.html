@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Login</title>  
+    <link rel="stylesheet" href="/static/site_panel/css/site_login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <h1>Site Login</h1>
+    <main>
+        <p>Please, use the provided username and password to login</p>
+        <form method="POST">
+            {% csrf_token %}
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" name="username" required>
+            <br><br>
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" name="password" required>
+            <br><br>
+            <button type="submit">Sign In</button>
+            <br>
+            {% if message %}
+            <div class="success-message" id="successMessage">{{ message }}</div>
+            <script>
+
+                // Then proceed with the redirect delay
+                setTimeout(function() {
+                    document.getElementById('successMessage').style.display = 'none';
+                    window.location.href = '/site_panel/site_home/';
+                }, 3000);
+            </script>
+            {% endif %}
+            {% if error %}
+            <div class="error-message" id="errorMessage" style="color: red; font-weight: bold;">{{ error }}</div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 3000);
+            </script>
+            {% endif %}
+        </form>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Designed and Developed at ACS </p>
+    </footer>
+    <script>
+        // Check if there's an error message on the page
+        const errorMessageElement = document.getElementById('errorMessage');
+
+        function checkSessionStatus() {
+            const last_username = localStorage.getItem('site_username');
+            console.log(last_username);
+
+            if (last_username){
+                fetch(`/site_panel/check_session/?last_username=${encodeURIComponent(last_username || '')}`) // Handle potential null last_username
+                .then(response => response.json())
+                .then(data => {
+                    if (data.is_active === 0) {
+                        localStorage.removeItem('activeTab');
+                        alert('Your session has been terminated by an administrator.');
+                        localStorage.removeItem('site_username');
+                        localStorage.setItem('activeTab', 'false');
+                        
+                    } else if (data.is_active === 1) {
+                        if (!errorMessageElement) {
+                            initializeTabManagement();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking session:", error);
+                    if (!errorMessageElement) {
+                        initializeTabManagement();
+                    }
+                });
+            }
+            else{
+                console.error("Error checking session:", error);
+                    if (!errorMessageElement) {
+                        initializeTabManagement();
+                    }
+            }
+            
+        }
+
+        function initializeTabManagement() {
+            function checkURLChange() {
+                const storedURL = localStorage.getItem('currentURL');
+                if (storedURL && window.location.href !== storedURL) {
+                    localStorage.setItem('activeTab', 'true');
+                }
+                localStorage.setItem('currentURL', window.location.href);
+                return;
+            }
+
+            if (localStorage.getItem('activeTab') === 'true' && window.location.pathname !== "/site_login/") {
+                alert('The website is already open in another tab.');
+                window.location.href = '/site_panel/';
+                return;
+            }
+
+            localStorage.setItem('activeTab', 'true');
+            let isNavigating = false;
+
+            document.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
+                    const targetHref = event.target.getAttribute('href');
+                    if (targetHref && !targetHref.startsWith('#')) {
+                        isNavigating = true;
+                    }
+                }
+            });
+
+            document.addEventListener('submit', function() {
+                isNavigating = true;
+            });
+
+            window.addEventListener('beforeunload', function() {
+                if (!isNavigating) {
+                    localStorage.removeItem('activeTab');
+                }
+            });
+
+            localStorage.setItem('currentURL', window.location.href);
+            window.addEventListener('popstate', checkURLChange);
+            window.addEventListener('hashchange', checkURLChange);
+        }
+
+        // Run checkSessionStatus immediately on page load
+        checkSessionStatus();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if request.session.site_location != "all" %}
+        <link rel="stylesheet" href="/static/site_panel/css/site_home.css">
+    {% else %}
+        <link rel="stylesheet" href="/static/site_panel/css/site_home_admin.css">
+    {% endif %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="{% static 'site_panel/images/restaurant_icon.png' %}" type="image/png">
+    <title>
+        Home
+    </title>
+</head>
+<body>
+    
+<!-- Main Navigation Bar -->
+<header>
+    <nav>
+        <a id="Settings-tab" class="restaurant-name">
+            <img src="{% static 'site_panel/images/restaurant_icon.png' %}" alt="Restaurant Icon" class="restaurant-icon">
+            {% if request.session.site_location != "all" %}
+                {{ request.session.restaurant_name }}
+            {% endif %}
+        </a>
+        <a href="/site_panel/home/" id="home-page">Home</a>
+        <a href="#" id="activity-tab">Activity Logs</a>
+        <a href="#" id='reports-tab'>Performance Reports</a>
+        <a href="#">Ops & Marketing Toolkit</a>
+        <span class="spacer"></span>
+        <a href="/site_panel/site_logout/" id="Sign-Out">Logout</a>
+    </nav>
+    <div id="activity-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/employee_management_dashboard/" id="employee-management">Employee Management</a>
+        <a href="/site_panel/employee_payroll/" id="employee-payroll">Employee Payroll</a>
+        <a href="/site_panel/daily_activity_tracking_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+    </div>
+    <div id="reports-sub-tabs" class="sub-tabs">
+        <a href="#" id="Daily-Reports">Daily</a>
+        <a href="#" id="Weekly-Reports">Weekly</a>
+        <a href="#" id="Biweekly-Reports">Biweekly</a>
+        <a href="#" id="Monthly-Reports">Monthly</a>
+        <a href="#" id="Specific-Range-Reports">Specific Range</a>
+    </div>
+    <div id="dailyReport-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_daily_activity_and_sales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+    </div>
+    <div id="weeklyReport-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_weekly_activity_and_sales_report/" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+        <a href="/site_panel/way_to_weekly_flash_report/" id="Weekly-Flash-Report">Weekly Flash Report</a>
+        <a href="/site_panel/way_to_weekly_wage_cost_report/" id="Weekly-Wage-Cost-Report">Weekly Wage Cost Report</a>
+        <a href="/site_panel/way_to_weekly_promo_report/" id="Weekly-Promo">Weekly Promo</a>
+    </div>
+    <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+    </div>
+    <div id="Monthly-rollover-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_monthly_rollover_report/" id="Monthly-Rollover-Report">Monthly Rollover Report</a>
+    </div>
+    <div id="Summary-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_summary_report/" id="Summary-Report">Summary Report</a>
+    </div>
+<script src="/static/site_panel/js/errorHandler.js"></script>
+</header>
+<main>
+    <section class="collage-section">
+        <div class="collage-grid">
+      
+          <!-- Title Overlay -->
+          {% if request.session.site_location != "all" %}
+            <div class="collage-overlay-title">
+                <h2>{{ request.session.restaurant_name }}'s Management Portal</h2>
+            </div>
+          {% else %}
+            <div class="collage-overlay-title">
+                <div class="scrolling-text">
+                    <h2>Welcome, Admin — Social99 Management Portal</h2>
+                </div>
+            </div>
+          {% endif %}
+      
+          <!-- Collage Items -->
+          {% if request.session.site_location != "all" %}
+            {% with request.session.restaurant_name as restaurant %}
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_1.jpg' %}" alt="MJ1">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_2.jpg' %}" alt="MJ2">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_3.jpg' %}" alt="MJ3">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_4.jpg' %}" alt="MJ4">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_5.jpg' %}" alt="MJ5">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_6.jpg' %}" alt="MJ6">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_7.jpg' %}" alt="MJ7">
+                </div>
+                <div class="collage-item">
+                    <img src="{% static 'site_panel/images/'|add:restaurant|add:'_8.jpg' %}" alt="MJ8">
+                </div>
+            {% endwith %}
+          {%endif%}
+        </div>
+      </section>      
+</main>
+  
+<footer>
+    <p>&copy; 2025 Social99. All rights reserved.</p>
+</footer>
+<script src="/static/site_panel/js/site_home.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        localStorage.setItem('site_username', '{{ request.session.user_name|escapejs }}');
+        if (!localStorage.getItem("activeTab")) {
+            localStorage.setItem("activeTab", "true");
+        }
+    
+        // Prevent logout on refresh
+        window.addEventListener("beforeunload", function (event) {
+            if (!sessionStorage.getItem("isNavigating")) {
+                event.preventDefault();
+                localStorage.setItem("activeTab", "true");
+            }
+        });
+    
+        // Track user navigation
+        document.addEventListener("click", function (event) {
+            if (event.target.tagName === "A" || event.target.tagName === "BUTTON") {
+                sessionStorage.setItem("isNavigating", "true");
+            }
+        });
+    
+        // Ensure Sign-Out clears storage
+        let signOutButton = document.getElementById("Sign-Out");
+        if (signOutButton) {
+            signOutButton.addEventListener("click", function () {
+                localStorage.removeItem("activeTab");
+                sessionStorage.clear();
+            });
+        }
+    });
+    
+</script>
+</body>
+</html>

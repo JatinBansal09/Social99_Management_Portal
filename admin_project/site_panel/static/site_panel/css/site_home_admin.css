@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+    min-height: 100vh; /* Essential for footer positioning */
+}
+
+.scrolling-text {
+    display: flex;
+    align-items: center;
+    position: fixed; 
+    white-space: nowrap;
+    height: 100vh;
+    top: 5%;
+  }
+
+  .scrolling-text h2 {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 10s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+header {
+    background-color: #343a40;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+nav {
+    display: flex;
+    align-items: center; /* Vertically center nav items */
+    /* No need to change nav for responsiveness, it's naturally at the top */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-top: 0; /* Remove top margin */
+    padding-top: 20px;
+}
+
+nav a#home-page:hover,
+nav a#home-page.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 3.5%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#activity-tab:hover,
+nav a#activity-tab.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 8%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#reports-tab:hover,
+nav a#reports-tab.active {
+    border-top: 3px solid white;
+    margin-top: 1.5%;
+    display: inline-block; /* Ensures proper alignment */
+    width: 6%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#Sign-Out:hover,
+nav a#Sign-Out.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 4%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#home-page {
+    /* Override the general nav a styles for the Home link */
+    color: inherit; /* or your desired color */
+    background-color: transparent; /* or your desired background */
+    padding-left: 2%;
+}
+
+nav a#home-page:hover {
+    background-color: transparent;/*or whatever background you want on hover.*/
+}
+
+nav a#home-page.active {
+    background-color: transparent; /*or whatever background you want on active.*/
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+#settings-icon {
+    font-size: 18px;
+}
+
+.arrow-input::after {
+    content: "▼"; 
+}
+
+.restaurant-name {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700; /* Medium weight */
+    width: 10%;
+    padding-right: 3%;
+    padding-top: -6%;
+    padding-bottom: -6%;
+    margin-left: 12px;
+    color: white;
+}
+
+.restaurant-icon {
+    height: 45px; /* Adjust size as needed */
+    margin-right: 6px; /* Space between icon and text */
+    padding: 0 !important; /* Override any inherited padding */
+    border: none; /* Remove any border */
+    display: block; /* Prevent inline spacing issues */
+    max-width: 100%; /* Ensure no extra space */
+    margin-top: -15px;
+    margin-left: -20px;
+    margin-bottom: -15px;
+}
+  
+footer {
+    align-items: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    font-size: 0.9em;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+    position: absolute; 
+    bottom: 0;
+}
+
+/* Sub-tabs CSS (unchanged) */
+.sub-tabs {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1;
+}
+
+#activity-sub-tabs{
+    margin-left: 21.4%;
+    width: 9%;
+    padding: 10px;
+    z-index:10;
+}
+
+#reports-sub-tabs{
+    margin-left: 31.5%;
+    width: 7%;
+    padding: 8px;
+    z-index:10;
+}
+
+header div a {
+    text-decoration: none; /* Removes underline */
+}
+
+header div a:hover {
+    text-decoration: none; /* Ensures it stays removed on hover */
+}
+
+#dailyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:0.5%;
+    z-index:20;
+}
+
+#weeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:3%;
+    z-index:20;
+}
+
+#BiweeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:5%;
+    z-index:20;
+}
+
+#Monthly-rollover-sub-tabs{
+    margin-left: 38%;
+    margin-top:7.4%;
+    z-index:20;
+}
+
+#Summary-sub-tabs{
+    margin-left: 38%;
+    margin-top:10.5%;
+    z-index:20;
+}
+
+h1{
+    color: #333;
+}
+
+@keyframes rotateIcon {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.rotate {
+    animation: rotateIcon 0.5s linear;
+}
+
+.sub-tabs a {
+    color: #333;
+    display: block;
+    padding: 5px 10px;
+}
+
+.sub-tabs a:hover {
+    background-color: #eee;
+}
+
+#Logout{
+    display: flex;
+    top: 50%; /* Moves it 50% down */
+    left: 50%; /* Moves it 50% right */
+    transform: translate(-50%, -50%); /* Adjusts for exact centering */
+    width: auto; /* Adjust width as needed */
+    padding: 10px 20px;
+    position: absolute;
+}
+
+#Logout_btn{
+    cursor: pointer;
+}
+
+/* Screens 1900px and above */
+@media screen and (min-width: 1900px) {
+    /* ... your large screen styles */
+    .sub-tabs {
+        width: 20%;
+        margin-left: 8%;
+    }
+    body{
+        font-size: 22px;
+    }
+    #Settings-tab input{
+        font-size: 22px;
+    }
+}
+
+/* Screens between 1200px and 1899px */
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+    /* ... your medium screen styles */
+
+    body{
+        font-size: 20px;
+    }
+    #Settings-tab input{
+        font-size: 20px;
+    }
+}
+
+/* Screens below 768px (Mobile) */
+@media screen and (max-width: 1100px) {
+
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+    }
+    
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.8rem;
+    }
+    
+    .sub-tabs {
+        position: absolute; /* or fixed */
+        top: 100px;
+        left: 0; /* Changed from 10px */
+        width: 100%; /* Changed from calc */
+        background-color: #343a40;
+        z-index: 1000;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    
+    .sub-tabs a {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    
+    #activity-sub-tabs a,
+    #reports-sub-tabs a,
+    #dailyReport-sub-tabs a,
+    #weeklyReport-sub-tabs a,
+    #BiweeklyReport-sub-tabs a,
+    #Monthly-rollover-sub-tabs a,
+    #Summary-sub-tabs a {
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    #activity-sub-tabs {
+        margin-top: 60px;
+        background-color: #343a40;
+        width: 90%;
+        margin-left: 20px;
+        box-sizing: border-box;
+    }
+
+    #reports-sub-tabs {
+        margin-top: 100px;
+        margin-left: 20px;
+        padding: 10px;
+        background-color: #343a40;
+        width: 90%;
+        box-sizing: border-box;
+    }
+    
+    #dailyReport-sub-tabs {
+        margin-top: 110px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #weeklyReport-sub-tabs {
+        margin-top: 140px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #BiweeklyReport-sub-tabs {
+        margin-top: 170px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Monthly-rollover-sub-tabs {
+        margin-top: 200px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Summary-sub-tabs {
+        margin-top: 230px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+    }
+
+    @media screen and (max-width: 800px) and (min-width: 600px){
+        .collage-overlay-title{
+            width: 86.6%;
+            height: 93.6%;
+        }
+    }
+
+@media screen and (max-width: 600px) and (min-width: 520px){
+        .collage-overlay-title{
+            width: 84.4%;
+            height: 93.5%;
+        }
+    }
+    
+@media screen and (max-width: 520px){
+    .collage-overlay-title{
+        width: 83.5%;
+        height: 96.8%;
+    }
+}

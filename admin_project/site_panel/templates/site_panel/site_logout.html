@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/site_panel/css/site_home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Home - Dashboard</title>
+</head>
+<body>
+
+<!-- Main Navigation Bar -->
+<header>
+    <nav>
+        <a href="/site_panel/site_dashboard/" id="home-page">Home</a>
+        <a href="#" id="activity-tab">Activity</a>
+        <a href="#" id='reports-tab'>Reports</a>
+        <a href="#">Operations & Marketing Library</a>
+        <span class="spacer"></span>
+        <a href="/site_panel/way_to_logout/"><i class="fa-solid fa-cog"></i></a>
+        {% if request.session.site_location != "all" %}
+            <a href="#"><input type="text" id="location" name="location" value="{{ request.session.site_location }}" readonly></a>
+            {% else %}
+            <a href="#" id="Settings-tab">
+                <input type="text" id="location" name="location" value="Settings" readonly>
+                <i class="fas fa-caret-down"></i>
+            </a>
+        {% endif %}
+    </nav>
+    <div id="activity-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/Employees_dashboard/" id="employee-management">Employee Management</a>
+        <a href="/site_panel/site_payroll/" id="employee-payroll">Employee Payroll</a>
+        <a href="/site_panel/site_activity_tracker_dashboard/" id="daily-activity-tracking">Daily Activity Tracking</a>
+    </div>
+    <div id="reports-sub-tabs" class="sub-tabs">
+        <a href="#" id="Daily-Reports">Daily</a>
+        <a href="#" id="Weekly-Reports">Weekly</a>
+        <a href="#" id="Biweekly-Reports">Biweekly</a>
+        <a href="#" id="Monthly-Reports">Monthly</a>
+        <a href="#" id="Specific-Range-Reports">Specific Range</a>
+    </div>
+    <div id="dailyReport-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_DailySales_report/" id="Daily-Activity&Sales-Report">Daily Activity & Sales Report</a>
+    </div>
+    <div id="weeklyReport-sub-tabs" class="sub-tabs">
+        <a href="#" id="Weekly-Activity&Sales-Report">Weekly Activity & Sales Report</a>
+    </div>
+    <div id="BiweeklyReport-sub-tabs" class="sub-tabs">
+        <a href="/site_panel/way_to_biweekly_payroll_report/" id="Biweekly-Payroll-Report">Biweekly Payroll Report</a>
+    </div>
+<script src="/static/site_panel/js/errorHandler.js"></script>
+</header>
+<main>
+
+    <center>
+        <h1>Settings  <i id='settingsPageIcon' class="fa-solid fa-cog"></i></h1>
+    </center>
+
+</main>
+<footer>
+    <p>&copy; 2025 Social99. All rights reserved.</p>
+</footer>
+
+<script src="/static/site_panel/js/site_home.js"></script>
+
+</body>
+</html>

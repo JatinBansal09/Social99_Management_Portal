@@ -1,0 +1,692 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #343a40;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+nav {
+    display: flex;
+    align-items: center; /* Vertically center nav items */
+    /* No need to change nav for responsiveness, it's naturally at the top */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-top: 0; /* Remove top margin */
+    padding-top: 20px;
+}
+
+nav a#home-page:hover,
+nav a#home-page.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 3.5%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#activity-tab:hover,
+nav a#activity-tab.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 8%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#reports-tab:hover,
+nav a#reports-tab.active {
+    border-top: 3px solid white;
+    margin-top: 1.5%;
+    display: inline-block; /* Ensures proper alignment */
+    width: 6%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#Sign-Out:hover,
+nav a#Sign-Out.active {
+    border-top: 3px solid white;
+    margin-top: 0;
+    display: inline-block; /* Ensures proper alignment */
+    width: 4%; /* Adjust this percentage to control the line width */
+    text-align: center;
+}
+
+nav a#home-page {
+    /* Override the general nav a styles for the Home link */
+    color: inherit; /* or your desired color */
+    background-color: transparent; /* or your desired background */
+    padding-left: 2%;
+}
+
+nav a#home-page:hover {
+    background-color: transparent;/*or whatever background you want on hover.*/
+}
+
+nav a#home-page.active {
+    background-color: transparent; /*or whatever background you want on active.*/
+}
+
+.restaurant-name {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700; /* Medium weight */
+    width: 10%;
+    padding-right: 3%;
+    padding-top: -6%;
+    padding-bottom: -6%;
+    margin-left: 12px;
+    color: white;
+}
+
+.restaurant-icon {
+    height: 45px; /* Adjust size as needed */
+    margin-right: 6px; /* Space between icon and text */
+    padding: 0 !important; /* Override any inherited padding */
+    border: none; /* Remove any border */
+    display: block; /* Prevent inline spacing issues */
+    max-width: 100%; /* Ensure no extra space */
+    margin-top: -15px;
+    margin-left: -20px;
+    margin-bottom: -15px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+#settings-icon {
+    font-size: 18px;
+}
+
+.sub-tabs {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1;
+}
+
+#activity-sub-tabs{
+    margin-left: 21.4%;
+    width: 9%;
+    padding: 10px;
+    z-index: 10;
+}
+
+#reports-sub-tabs{
+    margin-left: 31.5%;
+    width: 7%;
+    padding: 8px;
+}
+
+header div a {
+    text-decoration: none; /* Removes underline */
+}
+
+header div a:hover {
+    text-decoration: none; /* Ensures it stays removed on hover */
+}
+
+#dailyReport-sub-tabs,
+#weeklyReport-sub-tabs,
+#BiweeklyReport-sub-tabs {
+    z-index: 20; /* Higher than reports-sub-tabs */
+}
+
+#dailyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:0.5%;
+}
+
+#weeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:3%;
+}
+
+#BiweeklyReport-sub-tabs{
+    margin-left: 38%;
+    margin-top:5%;
+}
+
+#Monthly-rollover-sub-tabs{
+    margin-left: 38%;
+    margin-top:7.4%;
+}
+
+#Summary-sub-tabs{
+    margin-left: 38%;
+    margin-top:10.5%;
+}
+
+#Settings-sub-tabs{
+    margin-left: 81.5%;
+    width: 15%;
+    padding: 10px;
+}
+
+.sub-tabs a {
+    color: #333;
+    display: block;
+    padding: 5px 10px;
+}
+
+.sub-tabs a:hover {
+    background-color: #eee;
+}
+
+main {
+    flex: 1; /* Key: Allow main content to expand */
+    padding: 20px;
+}
+
+main > *:last-child {
+    margin-bottom: 0; /* Remove bottom margin from last element of main */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#Main-options {
+    background-color: #eee;
+    padding: 0;
+}
+
+#filter-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#filter-buttons > * {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+#filter-buttons button, #filter-buttons a {
+    background-color: #007bff;
+    color: white;
+}
+
+#session-data a {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+#filter-buttons > *:hover {
+    background-color: #ddd;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.page-dropdown {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#site_data_view {
+    padding: 20px;
+}
+
+.edit-icon {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    font-size: 0.9em;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: auto;
+}
+
+#session-data[hidden] {
+    display: none;
+}
+
+
+@media screen and (min-width: 1900px) {
+    /* ... your large screen styles */
+    body{
+        font-size: 22px;
+    }
+    #Settings-tab input{
+        font-size: 22px;
+    }
+}
+
+/* Screens between 1200px and 1899px */
+@media screen and (max-width: 1899px) and (min-width: 1300px) {
+    body{
+        font-size: 20px;
+    }
+    #Settings-tab input{
+        font-size: 20px;
+    }
+}
+
+/* Large Screen Adjustment */
+@media (min-width: 1600px) {
+    body {
+        max-width: auto;
+        margin: 0 auto;
+    }
+}
+
+
+@media screen and (max-width: 1100px) and (min-width: 900px) {
+    footer {
+        margin-top: 11%;
+        font-size: 0.85rem;
+    }
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+
+    button {
+        font-size: 0.8rem;
+    }
+
+    main a {
+        font-size: 0.8rem;
+    }
+}
+
+/* Styles for header, tabs, etc. (from your second CSS) */
+.header {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 5%;
+}
+
+.header h1 {
+    margin-bottom: 10px;
+    margin-top: -5%;
+}
+
+.location-week {
+    display: flex;
+    justify-content: center;
+    background-color: #eee;
+}
+
+#header_main{
+    background-color: #eee;
+}
+
+.location, .week_end {
+    margin: 0 10px;
+}
+
+.tabs-container {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-top: -4%;
+    padding-bottom: 4%;
+    background-color: #eee;
+}
+
+.tabs-container.margin-adjusted {
+    padding-left: 470px; /* or whatever margin you want */
+}
+  
+
+.tab {
+    padding: 10px 20px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.tab.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.segmented-control {
+    position: relative;
+    z-index: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabs {
+    display: flex;
+}
+
+.segmented-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.segmented-control label {
+    padding: 10px 20px;
+    padding-left: 35px;
+    background-color: #eee;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    
+}
+
+.segmented-control label:last-of-type {
+    border-right: none;
+}
+
+.segmented-control input[type="radio"] {
+    display: none;
+}
+
+.segmented-control input[type="radio"]:checked + label {
+    background-color: #fff;
+    color: #333;
+    z-index: 1;
+}
+
+.segmented-control label::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid #ccc;
+    vertical-align: middle;
+    position: absolute;
+    left: 10px;
+}
+
+.segmented-control input[type="radio"]:checked + label::before {
+    background-color: #007bff;
+    border: none;
+}
+
+.view-options {
+    display: flex;
+    align-items: center;
+}
+
+#update-view, #save-payroll {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.table-container {
+    overflow-x: auto;
+    padding: 20px;
+}
+
+table {
+    margin-top: 5%;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+td input {
+    width: 80%; /* Or a small width for OTHER inputs */
+}
+
+td input.notes {
+    width: auto; /* Your desired width for notes */
+}
+
+@media screen and (max-width: 1100px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+    }
+    
+    nav a {
+        width: 100%;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+        font-size: 0.8rem;
+    }
+    
+    .sub-tabs {
+        position: absolute; /* or fixed */
+        top: 100px;
+        left: 0; /* Changed from 10px */
+        width: 100%; /* Changed from calc */
+        background-color: #343a40;
+        z-index: 1000;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    
+    .sub-tabs a {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    
+    #activity-sub-tabs a,
+    #reports-sub-tabs a,
+    #dailyReport-sub-tabs a,
+    #weeklyReport-sub-tabs a,
+    #BiweeklyReport-sub-tabs a,
+    #Monthly-rollover-sub-tabs a,
+    #Summary-sub-tabs a {
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    #activity-sub-tabs {
+        margin-top: 60px;
+        background-color: #343a40;
+        width: 90%;
+        margin-left: 20px;
+        box-sizing: border-box;
+    }
+
+    #reports-sub-tabs {
+        margin-top: 100px;
+        margin-left: 20px;
+        padding: 10px;
+        background-color: #343a40;
+        width: 90%;
+        box-sizing: border-box;
+    }
+    
+    #dailyReport-sub-tabs {
+        margin-top: 110px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #weeklyReport-sub-tabs {
+        margin-top: 140px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #BiweeklyReport-sub-tabs {
+        margin-top: 170px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Monthly-rollover-sub-tabs {
+        margin-top: 200px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    #Summary-sub-tabs {
+        margin-top: 230px;
+        margin-left: 100px;
+        padding: 1px;
+        background-color: #343a40;
+        width: 60%;
+        box-sizing: border-box;
+    }
+    }
+
+
+/* Media Queries (Important: Adjust as needed) */
+@media screen and (max-width: 768px) {
+    /* ... (Your existing media query styles for small screens) */
+    
+    .tabs-container {
+        flex-direction: column; /* Stack tabs vertically */
+    }
+
+    .tabs {
+        flex-direction: column; /* Stack individual tabs */
+    }
+
+    .tab {
+        margin: 5px 0; /* Add margin between stacked tabs */
+        width: 100%; /* Make tabs full width */
+    }
+
+    .segmented-control {
+        flex-direction: column; /* Stack segmented control options */
+    }
+
+    .segmented-control label {
+        padding: 10px; /* Adjust padding for stacked labels */
+        width: 100%; /* Make labels full width */
+        border: none; /* Remove border between stacked labels */
+        border-bottom: 1px solid #ccc; /* Add bottom border */
+    }
+
+    .segmented-control label:last-of-type {
+        border-bottom: none; /* Remove bottom border from last label */
+    }
+
+    .view-options {
+        flex-direction: column; /* Stack buttons */
+        align-items: center; /* Center buttons horizontally */
+    }
+
+    #update-view, #save-payroll {
+        margin: 10px 0; /* Add margin between stacked buttons */
+        width: 100%; /* Make buttons full width */
+    }
+
+    table {
+        display: block; /* Make table scrollable horizontally */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        width: 100%;
+    }
+
+    th, td {
+        white-space: nowrap; /* Prevent text from wrapping */
+        min-width: 100px; /* Set a minimum width for columns */
+    }
+}
+
+/* ... (Rest of your CSS) ... */
